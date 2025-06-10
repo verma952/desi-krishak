@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import "./Profile.css";
 import ProductCard from "../ProductCard";
+const API_URL = import.meta.env.VITE_API_URL;
 const Profile = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ const Profile = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/api/users/profile?email=${user.email}`)
+        .get(`${API_URL}/api/users/profile?email=${user.email}`)
         .then((res) => {
           setProfile(res.data);
         })
@@ -35,7 +36,7 @@ const Profile = () => {
    const fetchUserProducts = async () => {
       try {
         const token = localStorage.getItem('token'); // Or use cookies
-        const response = await axios.get('http://localhost:5000/api/products/my-products', {
+        const response = await axios.get(`${API_URL}/api/products/my-products`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -64,7 +65,7 @@ const Profile = () => {
     setError("");
 
     axios
-      .put("http://localhost:5000/api/users/profile", profile)
+      .put(`${API_URL}/api/users/profile`, profile)
       .then((res) => {
         setMessage("Profile updated successfully!");
         login(res.data); // update context with fresh profile from DB

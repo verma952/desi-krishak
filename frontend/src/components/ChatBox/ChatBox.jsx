@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './ChatBox.css';
 import { GrSend } from "react-icons/gr";
 import { IoChatbubbleEllipses } from "react-icons/io5";
+const API_URL = import.meta.env.VITE_API_URL;
 function ChatBox() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -12,7 +13,6 @@ function ChatBox() {
 
   const sendMessage = async () => {
     if (!userInput.trim()) return;
-  
     const newMessage = { role: 'user', content: userInput };
     setMessages(prev => [...prev, newMessage]);
     setUserInput('');
@@ -27,7 +27,7 @@ function ChatBox() {
     }, 5000);
   
     try {
-      const response = await fetch('http://localhost:5000/chat', {
+      const response = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userInput })

@@ -31,7 +31,6 @@ router.post('/send-otp', async (req, res) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`✅ OTP sent to ${email}: ${otp}`);
     res.json({ message: 'OTP sent to email' });
   } catch (error) {
     console.error('❌ Email error:', error);

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import './ProductCard.css';
 import axios from "axios"; // ensure axios is installed
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 function ProductCard({ showMyProducts = false }) {
   const [products, setProducts] = useState([]);
 
@@ -9,8 +12,8 @@ function ProductCard({ showMyProducts = false }) {
       try {
         const token = localStorage.getItem("token");
         const url = showMyProducts
-          ? "http://localhost:5000/api/products/my-products"
-          : "http://localhost:5000/api/products";
+          ? `${API_URL}/api/products/my-products`
+          : `${API_URL}/api/products`;
 
         const config = showMyProducts
           ? { headers: { Authorization: `Bearer ${token}` } }
@@ -33,7 +36,7 @@ function ProductCard({ showMyProducts = false }) {
         <div className="product-card" key={item._id}>
           <div className="card-header">
            <img 
-                 src={`http://localhost:5000/${item.images?.[0]}`}
+                 src={`${API_URL}/${item.images?.[0]}`}
                 alt={item.name} 
                 className="product-image"
                 />

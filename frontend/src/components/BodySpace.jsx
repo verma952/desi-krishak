@@ -5,13 +5,13 @@ import ProductCard from "./ProductCard";
 import Container from "./smallComponents/Container";
 import FeaturedCarousel from "./smallComponents/FeaturedCarousel";
 import axios from "axios";
-
+const API_URL = import.meta.env.VITE_API_URL;
 function BodySpace() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     // Fetch products from backend
-    axios.get("http://localhost:5000/api/products") // Adjust endpoint as needed
+    axios.get(`${API_URL}/api/products`) // Adjust endpoint as needed
       .then((response) => {
         setProducts(response.data);
         console.log("Fetched products:", response.data);

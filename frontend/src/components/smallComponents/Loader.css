@@ -12,11 +12,15 @@
     border-top: 4px solid #f2a363;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+    box-shadow: 0 0 10px rgba(242, 163, 99, 0.5);
   }
+
   
+
   @keyframes spin {
     to {
       transform: rotate(360deg);
     }
+
   }
   

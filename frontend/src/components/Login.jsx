@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import './Login.css';
 import { AuthContext } from "./context/AuthContext";
-
+const API_URL = import.meta.env.VITE_API_URL;
 function Login() {
     const [email, setEmail] = useState("");
     const [otpSent, setOtpSent] = useState(false);
@@ -15,7 +15,7 @@ function Login() {
     const sendOtp = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:5000/api/auth/send-otp", { email });
+            await axios.post(`${API_URL}/api/auth/send-otp`, { email });
             setOtpSent(true);
             setMessage("OTP sent to your email");
         } catch (err) {
@@ -27,7 +27,7 @@ function Login() {
     const verifyOtp = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/verify-otp", { email, otp });
+            const res = await axios.post(`${API_URL}/api/auth/verify-otp`, { email, otp });
             if (res.data.success) {
                 login({ email });
                 localStorage.setItem("token", res.data.token);
