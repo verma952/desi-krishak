@@ -1,0 +1,106 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #113fa9;
+    color: white;
+    padding: 12px 20px;
+    flex-wrap: wrap;
+    font-family:Arial, Helvetica, sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.navbar-logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: #f2e863;  
+    text-decoration: none;
+}
+
+.navbar-links {
+    gap: 0px;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.navbar-links a {
+    padding: 8px 14px;
+    background-color: #2e6df4;
+    border-radius: 8px;
+    text-decoration: none;
+    color: rgb(245, 245, 245);
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    margin-left:10px ;
+    
+
+}
+
+.navbar-links a:hover {
+    background-color: #d08c26; /* Green on hover */
+    color: white;
+}
+.navbar-links a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.navbar-toggle {
+    display: none;
+    font-size: 24px;
+}
+
+/* Responsive rules */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        height: 25px;
+        
+    }
+    .navbar-logo {
+        font-size: 20px;
+    }
+
+    .navbar-toggle {
+        display:block;
+        position: absolute;
+        align-self: flex-end;
+        margin-bottom: 10px;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        position: absolute;
+        right:25%;
+        width: 30%;
+        display: none; /* Hidden by default on mobile */
+        z-index: 1;
+        float: right;
+        margin-top: 40px;
+        margin-right: -80px;
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #3648baaa; ;
+    }
+
+    .navbar-links.show {
+        display: flex;
+    }
+
+    .navbar-links a {
+        margin: 2px 0;
+        font-size: 14px;
+        width: 90%;
+    }
+    .searchbar {
+        display: flex;
+        align-self: first baseline;
+        width: 30%;
+        border-radius: 8px;
+        position:relative;
+        margin-right: 25px;
+    }
+}

@@ -1,0 +1,77 @@
+.footer {
+    background-color: #213988;
+    color: #fff;
+    padding: 30px 15px 15px;
+    font-family: 'Segoe UI', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+  }
+  
+  .footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    gap: 10px;
+    border-radius: 5px;
+  }
+  
+  .footer-section {
+    flex: 1 1 200px;
+    min-width: 180px;
+  }
+  
+  .footer-section h4,
+  .footer-section h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #fff;
+  }
+  
+  .footer-section p,
+  .footer-section ul li a {
+    color: #ccc;
+    font-size: 14px;
+    text-decoration: none;
+    line-height: 1.5;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 8px;
+  }
+  
+  .footer-section ul li a:hover {
+    color: #fff;
+  }
+  
+  .social-icons a {
+    margin-right: 10px;
+    color: #ccc;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  
+  .social-icons a:hover {
+    color: #fff;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+  }
+  
+  /* Responsive Optimized for Small Devi*
+  

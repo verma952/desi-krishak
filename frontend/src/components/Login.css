@@ -1,0 +1,83 @@
+
+/* Container with glassmorphic/neumorphic effect */
+.login-container {
+    width: 90%;
+    max-width: 400px;
+    padding: 30px 25px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #333;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* Heading */
+.login-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #000000;
+}
+
+/* Input fields */
+.login-container input {
+    width: 95%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    background: rgba(215, 211, 211, 0.6);
+    box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 6px rgba(255, 255, 255, 0.7);
+    outline: none;
+}
+
+/* Paragraph for alternate method */
+.login-container p {
+    font-size: 14px;
+    margin: 8px 0;
+    color: #555;
+}
+
+/* Button */
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #298931;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #e68d47;
+}
+
+/* Mobile-friendly tweaks */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 20px 15px;
+    }
+
+    .login-container h2 {
+        font-size: 20px;
+    }
+
+    .login-container input, 
+    .login-container button {
+        font-size: 14px;
+        padding: 10px;
+        width: 90%;
+    }
+}
