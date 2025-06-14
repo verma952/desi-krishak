@@ -26,7 +26,7 @@ function BodySpace() {
       {/* ✅ Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <h1>Welcome to AgroHaat!</h1>
+          <h1>Welcome to DesiKrishak!</h1>
           <p>India's local platform for buying & selling cattle, dairy, and farming tools.</p>
           <Link to="/sell" className="cta-button">Start Selling</Link>
         </div>

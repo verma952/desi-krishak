@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './Policies.css'; // Assuming 
 function Privacy() {
   return (
     <div className="policy-page">

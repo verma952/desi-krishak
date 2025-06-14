@@ -44,7 +44,7 @@ function Login() {
 
     return (
         <div className="login-container">
-            <h2>Login to AgroHaat</h2>
+            <h2>Login to DesiKrishak</h2>
             <form onSubmit={otpSent ? verifyOtp : sendOtp}>
                 <input
                     type="email"

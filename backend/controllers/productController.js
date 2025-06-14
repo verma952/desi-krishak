@@ -76,4 +76,28 @@ exports.getMyProducts = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch user products', error });
   }
 }
+
+exports.getProductsByCategory = async (req, res) => {
+  try {
+    const { category } = req.query;
+    if (!category) {
+      return res.status(400).json({ message: 'Category is required' });
+    }
+
+    const regexCategory = new RegExp(`^${category}$`, 'i'); // Case-insensitive match
+    const products = await Product.find();
+    // Filter products by category
+    const filteredProducts = products.filter(product => product.productType && product.productType.match(regexCategory));
+
+    if (filteredProducts.length === 0) {
+      return res.status(404).json({ message: `No products found for category: ${category}` });
+    }
+    // If you want to return the filtered products instead of all products
+    res.status(200).json(filteredProducts);
+  } catch (error) {
+    console.error('Error fetching products by category:', error);
+    res.status(500).json({ message: 'Failed to fetch products by category', error });
+  }
+};
+
 // Note: Ensure that the Product model is correctly defined in productModel.js

@@ -16,6 +16,7 @@ import ChatBot from "./components/ChatBox/ChatBox";
 import Profile from "./components/smallComponents/Profile";
 import { SearchProvider } from "./components/context/SearchContext";
 import { AuthProvider } from "./components/context/AuthContext";
+import CategoryProducts from "./components/CategoryProducts";
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
       <Route path="/terms" element={loading ? <Loader/>:<Terms />} />
       <Route path="/privacy" element={loading ? <Loader/>:<Privacy />} />
       <Route path="/refund" element={loading ? <Loader/>:<Refund />} />
+      <Route path="/products/:category" element={loading ? <Loader/>:<CategoryProducts />} />
       <Route path="*" element={loading ? <Loader/>:<BodySpace />} />
     </Routes>
       <ChatBot></ChatBot>

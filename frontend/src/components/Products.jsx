@@ -1,10 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Products.css";
 
 const categories = [
   {
     name: "Cattle",
-    image: "/images/buffalo.avif", // Replace with your actual image paths
+    image: "/images/buffalo.avif",
     description: "Buy cows, buffaloes, goats and more.",
   },
   {
@@ -35,7 +36,12 @@ function Products() {
             <div className="category-info">
               <h3>{category.name}</h3>
               <p>{category.description}</p>
-              <button className="view-btn">View Products</button>
+              <Link
+                to={`/products/${category.name.toLowerCase().replace(/\s+/g, "")}`}
+                className="view-btn"
+              >
+                View Products
+              </Link>
             </div>
           </div>
         ))}

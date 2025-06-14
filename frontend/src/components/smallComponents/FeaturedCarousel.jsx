@@ -4,17 +4,17 @@ import './FeaturedCarousel.css';
 const featuredItems = [
   {
     title: "Cattle",
-    image: "src/assets/images/cowImage.jpg",
+    image: "/images/cowImage.jpg",
     link: "/products/cattle",
   },
   {
     title: "Dairy Products",
-    image: "src/assets/images/milkTanks.jpg",
+    image: "/images/milkTanks.jpg",
     link: "/products/dairy",
   },
   {
     title: "Farming Tools",
-    image: "src/assets/images/farmingTools.png",
+    image: "/images/farmingTools.png",
     link: "/products/tools",
   },
 ];

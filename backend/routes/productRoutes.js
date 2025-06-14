@@ -14,6 +14,9 @@ router.post("/upload",authenticate, upload.array("images", 5), createProduct);
 // GET route to get all products
 router.get("/", getAllProducts);
 router.get("/my-products", authenticate, getMyProducts);
+// GET route to get products by category
+router.get("/category", getAllProducts); // This can be modified to filter by category if needed
+
 
 module.exports = router;
 

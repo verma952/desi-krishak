@@ -7,7 +7,7 @@ function Footer() {
       <div className="footer-container">
 
         <div className="footer-section brand">
-          <h3>AgroHaat</h3>
+          <h3>DesiKrishak</h3>
           <p>Empowering Farmers. Connecting Buyers.</p>
         </div>
 
@@ -26,7 +26,7 @@ function Footer() {
 
         <div className="footer-section contact">
           <h4>Contact Us</h4>
-          <p>Email: support@agrohaat.in</p>
+          <p>Email: support@desikrishak.in</p>
           <p>Phone: +91 98765 43210</p>
         </div>
 

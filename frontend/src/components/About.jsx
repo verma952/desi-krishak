@@ -18,7 +18,7 @@ function About() {
           </p>
         </div>
         <div className="about-image">
-          <img src="/images/about-farming.jpg" alt="AgroHaat Farming" />
+          <img src="/images/about-farming.jpg" alt="DesiKrishak Farming" />
         </div>
       </div>
     </section>

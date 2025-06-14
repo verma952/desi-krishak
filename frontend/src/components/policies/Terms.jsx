@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './Policies.css';
 function Terms() {
   return (
     <div className="policy-page">
