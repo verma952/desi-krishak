@@ -36,7 +36,15 @@ function CategoryProducts() {
         <div className="product-grid">
           {products.map((product) => (
             <div className="product-card" key={product._id}>
-              <img src={product.images[0]} alt={product.name} />
+             <img
+              src={
+                product.images && product.images[0]
+                  ? `${URL}/${product.images[0].replace(/\\/g, '/')}`  // normalize Windows paths too
+                  : "/images/default.jpg"
+              }
+              alt={product.name}
+/>
+
               <h3>{product.name}</h3>
               <p>₹{product.price}</p>
               <p>{product.details}</p>
