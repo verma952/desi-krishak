@@ -4,22 +4,22 @@ import "./Products.css";
 const categories = [
   {
     name: "Cattle",
-    image: "src/assets/images/buffalo.avif", // Replace with your actual image paths
+    image: "/images/buffalo.avif", // Replace with your actual image paths
     description: "Buy cows, buffaloes, goats and more.",
   },
   {
     name: "Dairy Products",
-    image: "src/assets/images/milkTanks.jpg",
+    image: "/images/milkTanks.jpg",
     description: "Milk, curd, paneer, ghee and fresh farm produce.",
   },
   {
     name: "Farming Tools",
-    image: "src/assets/images/farmingTools.png",
+    image: "/images/farmingTools.png",
     description: "Tractors, ploughs, sprinklers and other farming equipment.",
   },
   {
     name: "Others",
-    image: "src/assets/images/product-jpeg-500x500.webp",
+    image: "/images/product-jpeg-500x500.webp",
     description: "Miscellaneous agricultural products and goods.",
   },
 ];
