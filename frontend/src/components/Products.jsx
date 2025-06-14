@@ -5,21 +5,25 @@ import "./Products.css";
 const categories = [
   {
     name: "Cattle",
+    type: "cattle",
     image: "/images/buffalo.avif",
     description: "Buy cows, buffaloes, goats and more.",
   },
   {
     name: "Dairy Products",
+    type: "dairy",
     image: "/images/milkTanks.jpg",
     description: "Milk, curd, paneer, ghee and fresh farm produce.",
   },
   {
     name: "Farming Tools",
+    type: "farmingTools",
     image: "/images/farmingTools.png",
     description: "Tractors, ploughs, sprinklers and other farming equipment.",
   },
   {
     name: "Others",
+    type: "others",
     image: "/images/product-jpeg-500x500.webp",
     description: "Miscellaneous agricultural products and goods.",
   },
@@ -37,7 +41,7 @@ function Products() {
               <h3>{category.name}</h3>
               <p>{category.description}</p>
               <Link
-                to={`/products/${category.name.toLowerCase().replace(/\s+/g, "")}`}
+                to={`/products/${category.type.toLowerCase().replace(/\s+/g, "")}`}
                 className="view-btn"
               >
                 View Products

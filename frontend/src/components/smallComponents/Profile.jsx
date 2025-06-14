@@ -152,7 +152,7 @@ const Profile = () => {
         <p>Loading...</p>
       ) : products.length === 0 ? (
         <p>You haven't listed any products yet.</p>
-      ) : <ProductCard showMyProducts={true} />
+      ) : <ProductCard showMyProducts={true} products={products} />
       }
     </div>
     </>
