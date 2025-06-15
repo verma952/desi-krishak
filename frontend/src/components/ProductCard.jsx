@@ -48,12 +48,28 @@ const ProductCard = ({ products: propProducts = null, showMyProducts = false }) 
           alt={product.name}
         />
 
-          <h3>{product.name}</h3>
+          <h3>{product.productType}</h3>
           <p>₹{product.price}</p>
           <p>{product.details}</p>
           {showMyProducts && (
             <p className="product-label">Your Listing</p>
           )}
+          {/* get the current distance from the user to the product in real time */}
+          {/* village */}
+          <p className="product-village">
+            Village: {product.village ? product.village : "Not specified"}
+          </p>
+          <p className="product-date">
+            {new Date(product.timestamp).toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </p>
+          {/* phone number for direct contact */}
+          <p className="product-contact">
+            Contact: {product.phone ? product.phone : "Not provided"}
+          </p>
         </div>
       ))}
     </div>
