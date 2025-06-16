@@ -29,7 +29,11 @@ function Navbar({ onSearch }) {
   return (
     <>
       <nav className='navbar'>
-        <div className="navbar-logo">desiKrishak</div>
+        <div className="navbar-logo">
+          <Link to="/" className="logo-link">
+            <img src="/images/desi-krishak-logo.jpg" alt="Logo" className="logo-image" />
+          </Link>
+        </div>
 
         <div className="searchbar">
           <SearchBar onSearch={onSearch} />

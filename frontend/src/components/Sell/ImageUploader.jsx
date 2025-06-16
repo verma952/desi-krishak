@@ -3,7 +3,13 @@ import React, { useState } from 'react';
 function ImageUploader({ onUpload }) {
   const [images, setImages] = useState([null, null, null, null, null]);
 
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
   const handleImageChange = (index, file) => {
+    if (file && file.size > MAX_FILE_SIZE) {
+      alert(`Image size should not exceed 1MB. (${file.name} is too large)`);
+      return;
+    }
+
     const updatedImages = [...images];
     updatedImages[index] = file;
     setImages(updatedImages);
@@ -11,7 +17,7 @@ function ImageUploader({ onUpload }) {
     const validFiles = updatedImages.filter((img) => img !== null);
     onUpload(validFiles);
   };
-
+  
   const handleReset = (index) => {
     const updatedImages = [...images];
     updatedImages[index] = null;
@@ -20,6 +26,9 @@ function ImageUploader({ onUpload }) {
     const validFiles = updatedImages.filter((img) => img !== null);
     onUpload(validFiles);
   };
+
+  // restrict image size that is comfortable with mongodb
+   
 
   return (
     <div>
