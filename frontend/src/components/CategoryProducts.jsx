@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./CategoryProducts.css";
 
 const URL = import.meta.env.VITE_API_URL;
 
-// Helper function to calculate distance using Haversine formula
+// Helper function: Haversine distance
 const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Radius of Earth in km
+  const R = 6371; // Earth's radius in km
   const toRad = (value) => (value * Math.PI) / 180;
 
   const dLat = toRad(lat2 - lat1);
@@ -26,8 +26,27 @@ function CategoryProducts() {
   const { category } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const userLocation = useLocation();
+  const [userLocation, setUserLocation] = useState(null);
 
+  // Get user location on component mount
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ latitude, longitude });
+        },
+        (error) => {
+          console.error("Unable to fetch location:", error);
+          setUserLocation(null);
+        }
+      );
+    } else {
+      console.warn("Geolocation not supported by this browser.");
+    }
+  }, []);
+
+  // Fetch products by category
   useEffect(() => {
     const fetchCategoryProducts = async () => {
       try {
@@ -84,24 +103,20 @@ function CategoryProducts() {
                 <p>Distance from you:</p>
                 {(() => {
                   const location = product.location;
-const userLoc = userLocation?.state?.userLocation;
-if (
-  location &&
-  typeof location.lat === "number" &&
-  typeof location.lng === "number" &&
-  userLoc &&
-  typeof userLoc.latitude === "number" &&
-  typeof userLoc.longitude === "number"
-) {
-  const distance = getDistanceInKm(
-    userLoc.latitude,
-    userLoc.longitude,
-    location.lat,
-    location.lng
-  );
-  return <span>{distance.toFixed(2)} km</span>;
-}
-
+                  if (
+                    location &&
+                    typeof location.lat === "number" &&
+                    typeof location.lng === "number" &&
+                    userLocation
+                  ) {
+                    const distance = getDistanceInKm(
+                      userLocation.latitude,
+                      userLocation.longitude,
+                      location.lat,
+                      location.lng
+                    );
+                    return <span>{distance.toFixed(2)} km</span>;
+                  }
                   return <span>Not available</span>;
                 })()}
               </div>
@@ -113,6 +128,7 @@ if (
                   year: "numeric",
                 })}
               </p>
+
               <p className="product-contact">
                 Contact: {product.phone || "Not provided"}
               </p>
