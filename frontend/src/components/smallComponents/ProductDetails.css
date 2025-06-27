@@ -1,0 +1,181 @@
+.product-details {
+  max-width: 960px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  color: #333;
+}
+
+.images-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.images-gallery img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.images-gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  border: 2px solid #fff;
+}
+
+.info {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.info h2 {
+  margin-bottom: 12px;
+  font-size: 24px;
+  color: #213988;
+}
+
+.info p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.owner {
+  margin-top: 25px;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.owner h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #1739ab;
+}
+
+.owner p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.owner a {
+  text-decoration: none;
+  color: #1a3bb3;
+  font-weight: 500;
+}
+
+.owner a:hover {
+  text-decoration: underline;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.call-button,
+.whatsapp-button {
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 6px;
+  text-decoration: none;
+  color: white;
+  transition: background 0.3s ease;
+  border: none;
+}
+
+.call-button {
+  background-color: #d1d5e3;
+}
+
+.call-button:hover {
+  background-color: #88bb51;
+}
+
+.whatsapp-button {
+  background-color: #6ad325;
+}
+
+.whatsapp-button:hover {
+  background-color: #1ebe5d;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .product-details {
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .images-gallery img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .info h2 {
+    font-size: 20px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .call-button,
+  .whatsapp-button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .images-gallery img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .info {
+    padding: 16px;
+  }
+
+  .info p,
+  .owner p {
+    font-size: 13px;
+  }
+
+  .info h2,
+  .owner h3 {
+    font-size: 18px;
+  }
+}

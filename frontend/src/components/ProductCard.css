@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   padding: 4px;
+  width: 300px;
 }
 
 .product-card:hover {
@@ -22,20 +23,21 @@
 }
 
 .product-image {
-  width: 100%;
-  height: 220px;
+  width:30px;
+  height:180px;
+  max-width: 100%;
   object-fit: cover;
 }
 
 .product-content {
-  padding: 16px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 1px;
 }
 
 .product-title {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 600;
   color: #2c3e50;
 }
@@ -114,6 +116,11 @@
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
+  .product-card {
+    width:210px;
+    padding: 12px;
+    font-size: 12px;
+  }
   .product-image {
     height: 180px;
   }

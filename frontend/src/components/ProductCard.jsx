@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./ProductCard.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -13,6 +14,7 @@ const ProductCard = ({
 }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -31,9 +33,7 @@ const ProductCard = ({
     if (!propProducts) {
       axios
         .get(`${API_URL}/api/products`)
-        .then((res) => {
-          setProducts(res.data);
-        })
+        .then((res) => setProducts(res.data))
         .catch((err) => {
           console.error("Error fetching products:", err);
           setProducts([]);
@@ -49,7 +49,11 @@ const ProductCard = ({
 
   if (!products || products.length === 0) {
     return (
-      <p>{showMyProducts ? "You haven't listed any products yet." : "No products found."}</p>
+      <p>
+        {showMyProducts
+          ? "You haven't listed any products yet."
+          : "No products found."}
+      </p>
     );
   }
 
@@ -80,10 +84,12 @@ const ProductCard = ({
             <img src={imageUrl} alt={product.name} />
             <div className="product-card-content">
               <h2 className="product-name">{product.productType}</h2>
-              <p>{product.details}</p>
-              <p className="product-location">Village: {product.village || "N/A"}</p>
-              <p className="product-price">Price: ₹{product.price}</p>
-              {distance && <p className="product-distance">{distance} km away</p>}
+              <p className="product-details">{product.details}</p>
+              <p className="product-village">{product.village || "N/A"}</p>
+              <p className="product-price">₹{product.price}</p>
+              {distance && (
+                <p className="product-distance">{distance} km away</p>
+              )}
               <p className="product-date">
                 {new Date(product.createdAt).toLocaleDateString("en-IN", {
                   day: "numeric",
@@ -91,13 +97,24 @@ const ProductCard = ({
                   year: "numeric",
                 })}
               </p>
-                <h3>Seller Name: {product.name}</h3>
+              <h3 className="product-seller">Seller: {product.name}</h3>
               <p className="product-contact">{product.phone || "No contact"}</p>
 
               {showMyProducts && (
-                <button className="delete-button" onClick={() => onDelete?.(product._id)}>
+                <button
+                  className="delete-button"
+                  onClick={() => onDelete?.(product._id)}
+                >
                   Delete
                 </button>
+              )}
+
+              {!showMyProducts && (
+                <button
+                 className="view-details-button"
+                 onClick={() =>
+                 navigate(`/product/${product._id}`, { state: { product } })
+                }> View Details </button>
               )}
             </div>
           </div>

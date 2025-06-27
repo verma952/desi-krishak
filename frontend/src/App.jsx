@@ -17,7 +17,7 @@ import Profile from "./components/smallComponents/Profile";
 import { SearchProvider } from "./components/context/SearchContext";
 import { AuthProvider } from "./components/context/AuthContext";
 import CategoryProducts from "./components/CategoryProducts";
-
+import ProductDetails from "./components/smallComponents/ProductDetails";
 function App() {
 
   const [loading, setLoading] = useState(true);
@@ -54,6 +54,7 @@ function App() {
       <Route path="/refund" element={loading ? <Loader/>:<Refund />} />
       <Route path="/products/:category" element={loading ? <Loader/>:<CategoryProducts />} />
       <Route path="*" element={loading ? <Loader/>:<BodySpace />} />
+     <Route path="/product/:productId" element={<ProductDetails />} />
     </Routes>
       <ChatBot></ChatBot>
     <Footer />
