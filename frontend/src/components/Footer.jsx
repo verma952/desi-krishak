@@ -1,5 +1,6 @@
 import React from 'react';
 import './Footer.css';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 function Footer() {
   return (
@@ -33,15 +34,24 @@ function Footer() {
         <div className="footer-section social">
           <h4>Follow Us</h4>
           <div className="social-icons">
-            <a href="#"><i className="fab fa-facebook-f"></i></a>
-            <a href="#"><i className="fab fa-instagram"></i></a>
-            <a href="#"><i className="fab fa-twitter"></i></a>
+            <a href="https://www.facebook.com/desikrishak" target="_blank" rel="noopener noreferrer">
+              <FaFacebook />
+            </a>
+            <a href="https://www.instagram.com/desikrishak" target="_blank" rel="noopener noreferrer">
+              <FaInstagram />
+            </a>
+            <a href="https://www.twitter.com/desikrishak" target="_blank" rel="noopener noreferrer">
+              <FaTwitter />
+            </a>
+            <a href="https://www.linkedin.com/company/desikrishak" target="_blank" rel="noopener noreferrer">
+              <FaLinkedin />
+            </a>
           </div>
         </div>
 
       </div>
       <div className="footer-bottom">
-        &copy; {new Date().getFullYear()} AgroHaat. All rights reserved.
+        &copy; {new Date().getFullYear()} DesiKrishak. All rights reserved.
       </div>
     </footer>
   );

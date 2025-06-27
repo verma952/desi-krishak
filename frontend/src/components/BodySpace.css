@@ -10,43 +10,42 @@
     background-size: cover;
     background-position: center;
     color: rgb(223, 114, 56);
-    padding: 100px 20px;
     text-align: center;
     border-radius: 0 0 30px 30px;
   }
   
   .hero-content h1 {
-    font-size: 48px;
+    font-size: 20px;
     margin-bottom: 10px;
   }
   
   .hero-content p {
-    font-size: 20px;
+    font-size: 15px;
     margin-bottom: 20px;
   }
   
   .cta-button {
     background-color: #27ae60;
     color: white;
-    padding: 12px 24px;
+    padding: 10px 20px;
     border-radius: 8px;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 14px;
     transition: background 0.3s ease;
   }
   
   .cta-button:hover {
-    background-color: #219150;
+    background-color: #70ad89;
   }
   
   /* Category Section */
   .categories {
     text-align: center;
-    padding: 40px 20px;
+    padding: 20px 10px;
   }
   
   .categories h2 {
-    font-size: 32px;
+    font-size: 18px;
     margin-bottom: 20px;
   }
   
@@ -54,18 +53,18 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
   }
   
   .category-tile {
     background-color: #f1f1f1;
-    padding: 20px 30px;
+    padding: 10px 15px;
     border-radius: 12px;
     text-decoration: none;
     color: #2d3436;
     font-weight: 600;
     transition: all 0.3s ease;
-    min-width: 150px;
+    min-width: 110px;
   }
   
   .category-tile:hover {
@@ -80,7 +79,12 @@
   
   .featured h2 {
     text-align: center;
-    font-size: 28px;
+    font-size: 18px;
     margin-bottom: 20px;
   }
-  
+  .product-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
