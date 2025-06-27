@@ -1,13 +1,17 @@
 function CattleExtras({ milkProductionLitersPerDay, onChange }) {
     return (
-      <input
-        type="number"
-        name="milkPerDay"
-        placeholder="Milk Production (litres/day)"
-        value={milkProductionLitersPerDay}
-        onChange={onChange}
-        required
-      />
+        <div>
+            <label>
+                Milk Production (liters per day):
+                <input
+                    type="number"
+                    name="milkProductionLitersPerDay"
+                    value={milkProductionLitersPerDay}
+                    onChange={onChange}
+                    required
+                />
+            </label>
+        </div>
     );
   }
   

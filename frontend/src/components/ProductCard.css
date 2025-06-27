@@ -1,96 +1,154 @@
-/* ProductCard.css */
-
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    padding: 20px;
-  }
-  
-  .product-card {
-    background-color: #ffffff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  
-  .product-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .card-header img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .card-body {
-    padding: 16px;
-    flex-grow: 1;
-  }
-  
-  .card-title {
-    font-size: 20px;
-    color: #2d3436;
-    margin-bottom: 8px;
-  }
-  
-  .card-location,
-  .card-distance,
-  .card-price {
-    font-size: 15px;
-    color: #636e72;
-    margin-bottom: 6px;
-  }
-  
-  .card-footer {
-    padding: 12px 16px;
-    border-top: 1px solid #eee;
-    text-align: right;
-  }
-  
-  .view-btn {
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .view-btn:hover {
-    background-color: #219150;
-  }
-  .product-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
-.product-details {
+
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.product-content {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .product-title {
-  font-size: 20px;
-  color: #2d3436;
-  margin-bottom: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #2c3e50;
 }
-.product-location,
-.product-distance,
+
+.product-type {
+  font-size: 14px;
+  color: #888;
+  text-transform: capitalize;
+}
+
 .product-price {
-  font-size: 15px;
-  color: #636e72;
-  margin-bottom: 6px;
+  font-size: 16px;
+  color: #27ae60;
+  font-weight: 500;
 }
-.product-footer {
-  padding: 12px 16px;
-  border-top: 1px solid #eee;
-  text-align: right;
+
+.product-details {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.product-village,
+.product-distance,
+.product-date,
+.product-contact {
+  font-size: 13px;
+  color: #6c6c6c;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.product-distance {
+  color: #f06306;
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+
+.product-distance::before {
+  content: "📍";
+}
+.product-village::before {
+  content: "🏡";
+}
+.product-date::before {
+  content: "📅";
+}
+.product-contact::before {
+  content: "📞";
+}
+
+.product-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.delete-button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .product-image {
+    height: 180px;
+  }
+  .product-title {
+    font-size: 16px;
+  }
+  .product-price {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    padding: 10px;
+    gap: 14px;
+  }
+
+  .product-content {
+    padding: 12px;
+  }
+
+  .product-image {
+    height: 160px;
+  }
+
+  .product-title {
+    font-size: 15px;
+  }
+
+  .product-price {
+    font-size: 14px;
+  }
+
+  .delete-button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
 }

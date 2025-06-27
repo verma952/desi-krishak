@@ -1,37 +1,29 @@
-const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
+const User = require('../models/userModel'); // Make sure path is correct
 
-const otpStore = {}; // In-memory store for demo; use Redis in production
+const authenticate = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
 
-exports.sendOtp = async (req, res) => {
-  const { phone } = req.body;
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-  otpStore[phone] = otp;
-  console.log(`OTP for ${phone}: ${otp}`); // Send via Twilio in real use
-
-  res.status(200).json({ message: 'OTP sent' });
-};
-
-exports.verifyOtp = async (req, res) => {
-  const { phone, otp } = req.body;
-  if (otpStore[phone] !== otp) {
-    return res.status(400).json({ message: 'Invalid OTP' });
+  if (!token) {
+    return res.status(401).json({ message: 'No token, access denied' });
   }
 
-  let user = await User.findOne({ phone });
-  if (!user) {
-    user = new User({ phone, isVerified: true });
-    await user.save();
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // Fetch full user from DB
+    const user = await User.findById(decoded.id).select('-password');
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+
+    req.user = user; // 👈 Full user document now available
+    next();
+  } catch (err) {
+    console.error('JWT Error:', err.message);
+    return res.status(401).json({ message: 'Invalid token' });
   }
-
-  const token = jwt.sign({ userId: user._id, phone }, process.env.JWT_SECRET, {
-    expiresIn: '1d',
-  });
-
-  delete otpStore[phone];
-
-  res.status(200).json({ token, user });
 };
+
+module.exports = authenticate;

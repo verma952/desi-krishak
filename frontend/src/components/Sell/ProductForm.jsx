@@ -3,7 +3,7 @@ import SubTypeField from './SubTypeField';
 import CattleExtras from './CattleExtras';
 import ImageUploader from './ImageUploader';
 import LocationPicker from '../smallComponents/LocationPicker';
-
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 function ProductForm({ category, onReset }) {
     const [formData, setFormData] = useState({
         farmerName: '',
@@ -88,7 +88,7 @@ function ProductForm({ category, onReset }) {
       // Log the token for debugging
           console.log('Sending token:', token);
 
-      const response = await fetch('http://localhost:5000/api/products/upload', {
+      const response = await fetch(`${API_URL}/api/products/upload`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

@@ -3,7 +3,9 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import "./Profile.css";
 import ProductCard from "../ProductCard";
+
 const API_URL = import.meta.env.VITE_API_URL;
+
 const Profile = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ const Profile = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // Fetch profile from backend when user.email available
+  // Fetch profile & products when user is available
   useEffect(() => {
     if (user?.email) {
       axios
@@ -26,28 +28,43 @@ const Profile = () => {
           setProfile(res.data);
         })
         .catch(() => {
-          // User might not exist yet, keep defaults
           setProfile({ ...profile, email: user.email });
         });
+
+      fetchUserProducts(); // only when user is ready
     }
-      fetchUserProducts();
   }, [user]);
 
-   const fetchUserProducts = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Or use cookies
-        const response = await axios.get(`${API_URL}/api/products/my-products`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching user products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUserProducts = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/api/products/my-products`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching user products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (productId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}/api/products/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // remove deleted product from state
+      setProducts((prev) => prev.filter((p) => p._id !== productId));
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+    }
+  };
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -68,7 +85,7 @@ const Profile = () => {
       .put(`${API_URL}/api/users/profile`, profile)
       .then((res) => {
         setMessage("Profile updated successfully!");
-        login(res.data); // update context with fresh profile from DB
+        login(res.data); // update AuthContext with new profile
       })
       .catch(() => {
         setError("Failed to update profile");
@@ -85,76 +102,81 @@ const Profile = () => {
 
   if (!user) return <p>Please login to view your profile.</p>;
 
-
   return (
     <>
-    <div className="profile-card">
-      <h2>Your Profile</h2>
-      <form onSubmit={handleSubmit} className="profile-form">
-        <label>
-          Full Name
-          <input
-            type="text"
-            name="name"
-            value={profile.name || ""}
-            onChange={handleChange}
-            placeholder="Full Name"
+      <div className="profile-card">
+        <h2>Your Profile</h2>
+        <form onSubmit={handleSubmit} className="profile-form">
+          <label>
+            Full Name
+            <input
+              type="text"
+              name="name"
+              value={profile.name || ""}
+              onChange={handleChange}
+              placeholder="Full Name"
+            />
+          </label>
+
+          <label>
+            Phone Number
+            <input
+              type="text"
+              name="phone"
+              value={profile.phone || ""}
+              onChange={handleChange}
+              placeholder="Phone Number"
+            />
+          </label>
+
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              value={profile.email || ""}
+              onChange={handleChange}
+              placeholder="Email"
+              disabled
+            />
+          </label>
+
+          <label>
+            Address
+            <input
+              type="text"
+              name="address"
+              value={profile.address || ""}
+              onChange={handleChange}
+              placeholder="Address"
+            />
+          </label>
+
+          <button type="submit">Update Profile</button>
+
+          {message && <p className="success-message">{message}</p>}
+          {error && <p className="error-message">{error}</p>}
+        </form>
+
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+
+      <div className="profile-page">
+        <h1>My Listings</h1>
+        {loading ? (
+          <p>Loading...</p>
+        ) : products.length === 0 ? (
+          <p>You haven't listed any products yet.</p>
+        ) : (
+          <ProductCard
+            showMyProducts={true}
+            products={products}
+            onDelete={handleDelete}
           />
-        </label>
-
-        <label>
-          Phone Number
-          <input
-            type="text"
-            name="phone"
-            value={profile.phone || ""}
-            onChange={handleChange}
-            placeholder="Phone Number"
-          />
-        </label>
-
-        <label>
-          Email
-          <input
-            type="email"
-            name="email"
-            value={profile.email || ""}
-            onChange={handleChange}
-            placeholder="Email"
-            disabled // Usually don't allow email to be changed after login
-          />
-        </label>
-
-        <label>
-          Address
-          <input
-            type="text"
-            name="address"
-            value={profile.address || ""}
-            onChange={handleChange}
-            placeholder="Address"
-          />
-        </label>
-
-        <button type="submit">Update Profile</button>
-
-        {message && <p className="success-message">{message}</p>}
-        {error && <p className="error-message">{error}</p>}
-      </form>
-
-      <button className="logout-button" onClick={handleLogout}>
-        Logout
-      </button>
-    </div>
-    <div className="profile-page">
-      <h1>My Listings</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : products.length === 0 ? (
-        <p>You haven't listed any products yet.</p>
-      ) : <ProductCard showMyProducts={true} products={products} />
-      }
-    </div>
+        )}
+      </div>
     </>
   );
 };

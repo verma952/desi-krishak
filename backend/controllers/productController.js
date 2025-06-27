@@ -101,3 +101,25 @@ exports.getProductsByCategory = async (req, res) => {
 };
 
 // Note: Ensure that the Product model is correctly defined in productModel.js
+
+exports.deleteProduct = async (req, res) => {
+  try {
+    const userId = req.user._id; // ✅ Now available thanks to auth middleware
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (product.user.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Unauthorized to delete this product" });
+    }
+
+    await Product.findByIdAndDelete(productId);
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ message: "Failed to delete product", error });
+  }
+};

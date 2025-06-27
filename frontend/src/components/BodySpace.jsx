@@ -5,25 +5,79 @@ import ProductCard from "./ProductCard";
 import Container from "./smallComponents/Container";
 import FeaturedCarousel from "./smallComponents/FeaturedCarousel";
 import axios from "axios";
+
 const API_URL = import.meta.env.VITE_API_URL;
+
 function BodySpace() {
   const [products, setProducts] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
 
+  // Haversine formula to calculate distance
+  const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const toRad = (val) => (val * Math.PI) / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  // Get user's location
   useEffect(() => {
-    // Fetch products from backend
-    axios.get(`${API_URL}/api/products`) // Adjust endpoint as needed
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ latitude, longitude });
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        setUserLocation(null);
+      }
+    );
+  }, []);
+
+  // Fetch products
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/products`)
       .then((response) => {
-        setProducts(response.data);
-        console.log("Fetched products:", response.data);
+        const allProducts = response.data;
+
+        if (userLocation) {
+          const nearby = allProducts.filter((product) => {
+            if (
+              product.location &&
+              typeof product.location.lat === "number" &&
+              typeof product.location.lng === "number"
+            ) {
+              const distance = getDistanceInKm(
+                userLocation.latitude,
+                userLocation.longitude,
+                product.location.lat,
+                product.location.lng
+              );
+              return distance <= 80; // ✅ Only show if within 80 km
+            }
+            return false;
+          });
+
+          setProducts(nearby);
+        } else {
+          setProducts([]); // or set allProducts if fallback needed
+        }
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }, []);
+  }, [userLocation]);
 
   return (
     <div className="homepage">
-      {/* ✅ Hero Section */}
       <section className="hero">
         <div className="hero-content">
           <h1>Welcome to DesiKrishak!</h1>
@@ -32,10 +86,8 @@ function BodySpace() {
         </div>
       </section>
 
-      {/* ✅ Carousel Section */}
       <FeaturedCarousel />
 
-      {/* ✅ Category Section */}
       <section className="categories">
         <h2>Explore Categories</h2>
         <div className="category-links">
@@ -46,16 +98,13 @@ function BodySpace() {
         </div>
       </section>
 
-      {/* ✅ Product Feed */}
       <section className="featured">
-        <h2>Featured Products</h2>
+        <h2>Your Nearby Products</h2>
         <Container>
           {products.length > 0 ? (
-            products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))
+            <ProductCard products={products} userLocation={userLocation} />
           ) : (
-            <p>No products available at the moment.</p>
+            <p>No nearby products available.</p>
           )}
         </Container>
       </section>

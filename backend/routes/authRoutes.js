@@ -23,10 +23,10 @@ router.post('/send-otp', async (req, res) => {
   otpStore[email] = otp;
 
   const mailOptions = {
-    from: '"AgroHaat OTP" <vasudevverma0786@gmail.com>',
+    from: '"DesiKrishak OTP" <vasudevverma0786@gmail.com>',
     to: email,
-    subject: 'Your OTP for AgroHaat Login',
-    text: `Your OTP is: ${otp}. It is valid for 5 minutes.`,
+    subject: 'Your OTP for DesiKrishak Login.',
+    text: `Welcome to Desi Krishak. Your OTP is: ${otp}. It is valid for 5 minutes.`,
   };
 
   try {
