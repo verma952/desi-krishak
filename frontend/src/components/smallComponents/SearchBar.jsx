@@ -1,9 +1,11 @@
-import React, { useState, useContext } from "react";
-import "./SearchBar.css";
-import { BsSearch } from "react-icons/bs";
-import SearchContext from "../context/SearchContext"; // ✅ correct default import
+// src/components/smallComponents/SearchBar.js - Corrected
 
-function SearchBar({ onSearch }) {          // onSearch is now optional
+import React, { useState, useContext } from "react";
+import { BsSearch } from "react-icons/bs";
+import "./SearchBar.css";
+import SearchContext from "../context/SearchContext";
+
+function SearchBar({ onSearch }) {
   const [query, setQuery] = useState("");
   const { setSearchQuery } = useContext(SearchContext);
 
@@ -11,24 +13,25 @@ function SearchBar({ onSearch }) {          // onSearch is now optional
     e.preventDefault();
     const trimmed = query.trim().toLowerCase();
     if (!trimmed) return;
-
-    // update global state
     setSearchQuery(trimmed);
 
-    // call onSearch ONLY if it exists and is a function
     if (typeof onSearch === "function") {
       onSearch(trimmed);
     }
   };
+
   return (
-    <form className="search-bar" onSubmit={handleSubmit}>
+    <form className="search-form" onSubmit={handleSubmit}>
       <input
+        className="search-input"
         type="text"
-        placeholder="Search products..."
+        placeholder="Search for cattle, grains..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <button><BsSearch /></button>
+      <button type="submit" className="search-button" aria-label="Search">
+       <BsSearch />
+      </button>
     </form>
   );
 }

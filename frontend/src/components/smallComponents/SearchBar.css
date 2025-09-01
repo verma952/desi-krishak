@@ -1,49 +1,50 @@
-.search-bar {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: white;
-    padding: 4px 10px;
-    width: 250px;
-    max-width: 300px;
-    height:24px;
-  }
-  
-  .search-bar input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 4px;
-    font-size: 14px;
-    height: 25px;
-  }
-  
-  .search-bar button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-  }
+/* src/components/smallComponents/SearchBar.css - Refactored */
 
-  @media (max-width: 900px) {
-    .search-bar {
-      width: 112px;
-      margin-top: -3px;
-    }
-    
-    .search-bar input {
-      width: 90px;
-      font-size: 12px;
-      height: 18px;
-    }
-    .search-bar button {
-      position:relative;
-      font-size: 15px;
-      right: 18px;
-      
-      top: 2px;
-    }
-    
+.search-form {
+  display: flex;
+  align-items: center;
+  width: 100%; /* ✅ This is the key: it will now fill its container */
+  position: relative;
 }
+
+.search-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 50px; /* Pill shape for the modern look */
+  padding: 0.7rem 2.5rem 0.7rem 1.2rem; /* Add padding to prevent text from overlapping the button */
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif; /* Using our new font */
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
+}
+
+.search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute; /* ✅ Position the button INSIDE the input area */
+  right: 6px;
+  height: 38px;
+  width: 38px;
   
+  background-color: var(--primary-green);
+  color: white;
+  border: none;
+  border-radius: 50%; /* Make the button a perfect circle */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-button:hover {
+  background-color: var(--primary-dark-green);
+}
+
+.search-button svg {
+  width: 20px;
+  height: 20px;
+}

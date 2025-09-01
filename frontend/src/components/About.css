@@ -1,46 +1,84 @@
-.about-section {
-    padding: 60px 20px;
-    background-color: #ffffff;
-    border-top: 1px solid #eee;
-  }
-  
+/* src/components/About.css - Refactored */
+
+.about-page {
+  background-color: var(--background-light);
+  padding: 3rem 1.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two-column layout */
+  gap: 3rem;
+  align-items: center;
+}
+
+.about-text-content .about-heading {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-dark-green);
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+.about-text-content > p {
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+
+/* --- Our Values Section --- */
+.our-values {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.value-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.value-icon {
+  font-size: 2rem;
+  color: var(--primary-green);
+  margin-top: 5px;
+}
+
+.value-text h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 0.5rem;
+}
+
+.value-text p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+
+/* --- Image Styling --- */
+.about-image-wrapper img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+/* --- Responsive for Mobile --- */
+@media (max-width: 850px) {
   .about-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    align-items: center;
-    justify-content: space-between;
+    grid-template-columns: 1fr; /* Stack columns on mobile */
   }
-  
-  .about-text {
-    flex: 1 1 500px;
+
+  .about-image-wrapper {
+    order: -1; /* Move image to the top on mobile */
   }
-  
-  .about-text h2 {
-    font-size: 32px;
-    margin-bottom: 20px;
-    color: #1a472a;
-  }
-  
-  .about-text p {
-    font-size: 18px;
-    color: #444;
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
-  
-  .about-image {
-    flex: 1 1 400px;
-    text-align: center;
-  }
-  
-  .about-image img {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    object-fit: cover;
-  }
-  
+}

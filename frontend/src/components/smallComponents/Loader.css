@@ -1,26 +1,125 @@
+/* src/components/smallComponents/Loader.css - FIX for Swapped Tyres */
+
 .loader-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-  }
-  
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid #f2a363;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    box-shadow: 0 0 10px rgba(242, 163, 99, 0.5);
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  gap: 1.5rem;
+  overflow: hidden;
+  background-color: var(--background-light);
+  min-height: 200px;
+}
 
-  
+.loader-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  color: var(--text-dark);
+  font-size: 1.1rem;
+}
 
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+.tractor-loader-improved {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  animation: drive-across 3s linear infinite,
+             wobble 0.5s infinite ease-in-out;
+  height: 6rem;
+  width: 10rem;
+}
 
-  }
-  
+.tractor-chassis {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+}
+
+/* Tractor Body Parts */
+.tractor-cab {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--primary-dark-green);
+  border-radius: 0.5rem 0.5rem 0 0;
+  position: absolute;
+  top: 1rem;
+  left: 2rem; /* Positioned over the back wheel */
+  z-index: 3;
+}
+
+.tractor-body-front {
+  width: 5rem;
+  height: 2.5rem;
+  background-color: var(--primary-green);
+  border-radius: 0.5rem 1rem 0 0;
+  position: absolute;
+  top: 2rem;
+  left: 3rem; /* Positioned between the wheels */
+  z-index: 2;
+}
+
+.tractor-chimney {
+  width: 0.5rem;
+  height: 1.5rem;
+  background-color: #555;
+  border-radius: 0.25rem 0.25rem 0 0;
+  position: absolute;
+  top: 0.5rem;
+  left: 4.5rem;
+  z-index: 4;
+}
+
+.tractor-headlight {
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: var(--accent-yellow);
+  border-radius: 50%;
+  position: absolute;
+  top: 3rem;
+  left: 7.8rem; /* Positioned at the very front */
+  z-index: 4;
+}
+
+/* Wheels */
+.wheel {
+  background-color: #333;
+  border: 4px solid #555;
+  border-radius: 50%;
+  animation: spin 0.5s linear infinite;
+  position: absolute;
+  bottom: 0;
+}
+
+.back-wheel {
+  /* ✅ Large wheel, positioned at the back */
+  width: 3.5rem;
+  height: 3.5rem;
+  left: 0.5rem;
+  z-index: 1; /* Behind the tractor body */
+}
+
+.front-wheel {
+  /* ✅ Small wheel, positioned at the front */
+  width: 2.5rem;
+  height: 2.5rem;
+  left: 6rem;
+  z-index: 3; /* In front of the tractor body */
+}
+
+
+/* --- Animations (no change) --- */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes drive-across {
+  0% { transform: translateX(-150px); }
+  100% { transform: translateX(150px); }
+}
+
+@keyframes wobble {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}

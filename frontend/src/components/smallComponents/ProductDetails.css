@@ -1,181 +1,163 @@
-.product-details {
-  max-width: 960px;
-  margin: 30px auto;
-  padding: 20px;
-  font-family: 'Segoe UI', sans-serif;
+/* src/components/ProductDetails.css - Refactored */
+
+.product-details-container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+/* ✅ Main two-column grid layout for desktop */
+.product-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+/* --- Left Column: Image Gallery --- */
+.gallery-container {
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  color: #333;
+  gap: 1rem;
 }
 
-.images-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-}
-
-.images-gallery img {
-  width: 180px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.images-gallery img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.modal img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
-  border: 2px solid #fff;
-}
-
-.info {
-  background-color: #fff;
-  padding: 24px;
+.main-image-wrapper {
   border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.info h2 {
-  margin-bottom: 12px;
-  font-size: 24px;
-  color: #213988;
+.main-image-wrapper img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
 }
 
-.info p {
-  margin: 8px 0;
-  font-size: 15px;
+.thumbnail-wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
 }
 
-.owner {
-  margin-top: 25px;
+.thumbnail-wrapper img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.thumbnail-wrapper img:hover {
+  border-color: #ccc;
+}
+
+.thumbnail-wrapper img.active {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 2px var(--primary-green);
+}
+
+/* --- Right Column: Product Info --- */
+.info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-type-label {
+  color: #888;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.product-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--primary-dark-green);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.product-price-details {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-green);
+  margin: 1rem 0;
+}
+
+.details-section {
+  margin-top: 1.5rem;
   border-top: 1px solid #eee;
-  padding-top: 15px;
+  padding-top: 1.5rem;
 }
 
-.owner h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #1739ab;
+.details-section h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
 }
 
-.owner p {
-  margin: 5px 0;
-  font-size: 14px;
+.details-section p, .map-link {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
 }
 
-.owner a {
+.map-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--primary-green);
   text-decoration: none;
-  color: #1a3bb3;
   font-weight: 500;
 }
-
-.owner a:hover {
+.map-link:hover {
   text-decoration: underline;
 }
 
 .action-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
-.call-button,
-.whatsapp-button {
-  padding: 10px 20px;
-  font-size: 15px;
-  font-weight: 500;
-  border-radius: 6px;
+.call-button, .whatsapp-button {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
   text-decoration: none;
+  text-align: center;
   color: white;
-  transition: background 0.3s ease;
+  transition: background-color 0.2s ease;
   border: none;
 }
 
 .call-button {
-  background-color: #d1d5e3;
+  background-color: var(--primary-dark-green);
 }
-
 .call-button:hover {
-  background-color: #88bb51;
+  background-color: #3a5c6a;
 }
-
 .whatsapp-button {
-  background-color: #6ad325;
+  background-color: #25D366;
 }
-
 .whatsapp-button:hover {
   background-color: #1ebe5d;
 }
 
-/* Responsive Layout */
-@media (max-width: 768px) {
-  .product-details {
-    padding: 15px;
-    gap: 20px;
+/* --- Responsive Layout for Mobile --- */
+@media (max-width: 850px) {
+  .product-details-grid {
+    grid-template-columns: 1fr; /* Stack columns on mobile */
+    gap: 2rem;
   }
-
-  .images-gallery img {
-    width: 120px;
-    height: 120px;
+  .main-image-wrapper img {
+    height: 300px;
   }
-
-  .info h2 {
-    font-size: 20px;
-  }
-
-  .action-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .call-button,
-  .whatsapp-button {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .images-gallery img {
-    width: 100px;
-    height: 100px;
-  }
-
-  .info {
-    padding: 16px;
-  }
-
-  .info p,
-  .owner p {
-    font-size: 13px;
-  }
-
-  .info h2,
-  .owner h3 {
-    font-size: 18px;
+  .thumbnail-wrapper img {
+    height: 60px;
   }
 }

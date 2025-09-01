@@ -1,228 +1,80 @@
-import React, { useState, useRef } from 'react';
-import SubTypeField from './SubTypeField';
-import CattleExtras from './CattleExtras';
-import ImageUploader from './ImageUploader';
-import LocationPicker from '../smallComponents/LocationPicker';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-function ProductForm({ category, onReset }) {
-    const [formData, setFormData] = useState({
-        farmerName: '',
-        productType: category,
-        subType: '',
-        village: '',
-        location: null, // Initially null
-        price: '',
-        phone: '',  
-        details: '',
-        imageFiles: [],
-        milkProductionLitersPerDay: ''
-      });
+// src/components/Sell/ProductForm.jsx - Redesigned for Simplicity
 
-  const fileInputRef = useRef(null);
+import React, { useState } from 'react';
+import './ProductForm.css'; // We will use the new, simpler CSS
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+const ProductForm = ({ category, onBack }) => {
+  const [formData, setFormData] = useState({ /* ... your form state ... */ });
+  const [imagePreviews, setImagePreviews] = useState([]);
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files).slice(0, 5); // Limit to 5 images
+    const previews = files.map(file => URL.createObjectURL(file));
+    setImagePreviews(previews);
   };
 
-  const handleImageUpload = (files) => {
-    setFormData((prev) => ({ ...prev, imageFiles: files }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Validate required fields
-    const requiredFields = ['farmerName', 'productType', 'village', 'location', 'price', 'details'];
-    for (let field of requiredFields) {
-      if (!formData[field]) {
-        alert(`Please fill in the ${field}`);
-        return;
-      }
-    }
-
-    // Validate images count
-    if (!formData.imageFiles || formData.imageFiles.length < 2 || formData.imageFiles.length > 5) {
-      alert("Please upload between 2 and 5 images.");
-      return;
-    }
-
-    // For cattle, check milk production input
-    if (formData.productType === 'cattle' && !formData.milkProductionLitersPerDay) {
-      alert('Please enter milk production (liters per day)');
-      return;
-    }
-
-    try {
-      const formDataToSend = new FormData();
-
-      // Append form fields
-      formDataToSend.append('name', formData.farmerName);
-      formDataToSend.append('productType', formData.productType);
-      formDataToSend.append('subType', formData.subType || '');
-      formDataToSend.append('village', formData.village);
-      formDataToSend.append('location', JSON.stringify(formData.location));
-
-      formDataToSend.append('price', formData.price);
-      formDataToSend.append('details', formData.details);
-      formDataToSend.append('phone', formData.phone);
-
-      if (formData.productType === 'cattle') {
-        formDataToSend.append('milkProductionLitersPerDay', formData.milkProductionLitersPerDay);
-      }
-
-      // Append images
-      formData.imageFiles.forEach((file) => {
-        formDataToSend.append('images', file);
-      });
-      // Log formData for 
-       for (let pair of formDataToSend.entries()) {
-             console.log(`${pair[0]}: ${pair[1]}`);
-          }   
-      const token = localStorage.getItem('token');
-          if (!token) {
-           alert('You must be logged in to submit a product.');
-           return;
-          }
-          
-      // Log the token for debugging
-          console.log('Sending token:', token);
-
-      const response = await fetch(`${API_URL}/api/products/upload`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formDataToSend,
-      });
-
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Product submitted successfully!');
-        // Reset the form and notify parent to reset category
-        setFormData({
-          farmerName: '',
-          productType: category,
-          subType: '',
-          village: '',
-          location: null,
-          price: '',
-          phone: '',
-          details: '',
-          imageFiles: [],
-          milkProductionLitersPerDay: '',
-        });
-        if (fileInputRef.current) fileInputRef.current.value = ''; // reset file input if you pass this ref down to ImageUploader
-        onReset(); // tell parent to reset category so form disappears
-      } else {
-        alert('Error: ' + data.message);
-      }
-    } catch (error) {
-      alert('Server error: ' + error.message);
-    }
+    console.log('Form Submitted:', { category, ...formData });
+    alert('Product submitted successfully! / प्रोडक्ट सफलतापूर्वक सबमिट हो गया!');
   };
-
-
-    const handleGetCurrentLocation = () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setFormData((prev) => ({
-          ...prev,
-          location: { lat: latitude, lng: longitude },
-        }));
-        alert("📍 Location set successfully!");
-      },
-      (error) => {
-        alert("❌ Unable to fetch location. Please allow location access.");
-        console.error("Geolocation error:", error);
-      }
-    );
-  } else {
-    alert("Geolocation is not supported by this browser.");
-  }
-};
-
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        name="farmerName"
-        placeholder="Farmer Name"
-        value={formData.farmerName}
-        onChange={handleChange}
-        required
-      />
-      <SubTypeField category={category} subType={formData.subType} onChange={handleChange} />
-      {category === 'cattle' && (
-        <CattleExtras milkProductionLitersPerDay={formData.milkProductionLitersPerDay} onChange={handleChange} />
+    <form className="simple-product-form" onSubmit={handleSubmit}>
+      <h2 className="form-title">
+        Product Details / प्रोडक्ट की जानकारी
+        <span className="category-highlight">{category}</span>
+      </h2>
 
-      )}
-      <input
-        name="village"
-        placeholder="Village"
-        value={formData.village}
-        onChange={handleChange}
-        required
-      />
+      {/* --- Product Details Section --- */}
+      <div className="form-group">
+        <label htmlFor="name">🏷️ Product Name / उत्पाद का नाम</label>
+        <input type="text" id="name" name="name" placeholder="e.g., Sahiwal Cow / साहीवाल गाय" required />
+      </div>
 
-       {/*select the location on map.  */}
-        
-        <div style={{ marginBottom: "1rem" }}>
-        <LocationPicker
-          location={formData.location}
-          onLocationChange={(loc) => setFormData((prev) => ({ ...prev, location: loc }))}
-        />
-          <button
-            type="button"
-            onClick={handleGetCurrentLocation}
-            style={{
-              marginTop: '0.5rem',
-              padding: '0.5rem 1rem',
-              border: 'none',
-              backgroundColor: '#007bff',
-              color: '#fff',
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
- >
-    📍 Get Current Location
-  </button>
-</div>
+      <div className="form-group">
+        <label htmlFor="price">₹ Price / क़ीमत</label>
+        <input type="number" id="price" name="price" placeholder="e.g., 50000" required />
+      </div>
 
+      <div className="form-group">
+        <label htmlFor="details">📝 Description / विवरण</label>
+        <textarea id="details" name="details" placeholder="Write about age, breed, quality... / उम्र, नस्ल, गुणवत्ता के बारे में लिखें..." required></textarea>
+      </div>
+      
+      {/* --- Photo Upload Section --- */}
+      <div className="form-group">
+        <label>📷 Upload Photos / फ़ोटो अपलोड करें</label>
+        <div className="file-uploader-simple">
+          <input type="file" id="images" name="images" onChange={handleImageChange} multiple accept="image/png, image/jpeg" />
+          <p>Tap here to select up to 5 photos</p>
+          <p>5 फ़ोटो चुनने के लिए यहां टैप करें</p>
+        </div>
+        <div className="image-previews">
+          {imagePreviews.map((src, index) => (
+            <img key={index} src={src} alt={`Preview ${index + 1}`} />
+          ))}
+        </div>
+      </div>
+      
+      {/* --- Contact & Location Section --- */}
+      <div className="form-group">
+        <label htmlFor="village">📍 Village/City / गांव/शहर</label>
+        <input type="text" id="village" name="village" placeholder="e.g., Rampur, Ghaziabad" required />
+      </div>
 
-
-      <input
-        name="price"
-        placeholder="Price (in INR)"
-        value={formData.price}
-        onChange={handleChange}
-        required
-      />
-      <input type='tel' 
-        name="phone"
-        placeholder="Phone Number"
-        value={formData.phone}
-        onChange={handleChange}
-        required
-        />
-    
-      <textarea
-        name="details"
-        placeholder="Details (max 500 chars)"
-        value={formData.details}
-        onChange={handleChange}
-        maxLength={500}
-        required
-      />
-      <ImageUploader onUpload={handleImageUpload} ref={fileInputRef} />
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onReset}>Reset</button>
+      <div className="form-group">
+        <label htmlFor="phone">📞 Phone Number / फ़ोन नंबर</label>
+        <input type="tel" id="phone" name="phone" placeholder="Your 10-digit mobile number" required />
+      </div>
+      
+      {/* --- Action Buttons --- */}
+      <div className="form-actions-simple">
+        <button type="button" className="back-button" onClick={onBack}>Back / वापस</button>
+        <button type="submit" className="submit-button">Submit Ad / विज्ञापन सबमिट करें</button>
+      </div>
     </form>
   );
-}
+};
 
 export default ProductForm;

@@ -1,0 +1,42 @@
+/* src/components/Sell/Stepper.css */
+.stepper-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+.step.active {
+  color: var(--primary-green);
+}
+.step-number {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: currentColor;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+.step-label {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.step-line {
+  flex-grow: 1;
+  height: 2px;
+  background-color: #eee;
+  margin: 0 1rem;
+  max-width: 100px;
+  position: relative;
+  top: -15px; /* Aligns with middle of circle */
+}

@@ -1,0 +1,117 @@
+/* src/components/Sell/ProductForm.css - Redesigned for Mobile */
+
+.simple-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Increased gap for better spacing */
+}
+
+.form-title {
+  text-align: center;
+  font-size: 1.5rem; /* Slightly smaller for mobile */
+  color: var(--primary-dark-green);
+  margin-bottom: 1rem;
+}
+
+.form-title .category-highlight {
+  display: block;
+  color: var(--accent-orange);
+  text-transform: capitalize;
+  font-size: 1.2rem;
+  margin-top: 0.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 1.1rem; /* Larger font size */
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 0.75rem; /* More space below label */
+}
+
+input[type="text"], input[type="number"], input[type="tel"], textarea {
+  width: 100%;
+  padding: 1rem; /* Larger padding for easier tapping */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1.1rem; /* Larger font inside input */
+  font-family: 'Poppins', sans-serif;
+}
+
+textarea {
+  min-height: 140px;
+}
+
+/* --- Simple File Uploader for Mobile --- */
+.file-uploader-simple {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  position: relative; /* Needed for the input overlay */
+}
+
+.file-uploader-simple p {
+  margin: 0.25rem 0;
+  color: #555;
+  font-weight: 500;
+}
+
+.file-uploader-simple input[type="file"] {
+  /* This makes the entire area clickable */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.image-previews {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap; /* Allow previews to wrap to next line */
+}
+.image-previews img {
+  width: 70px; /* Larger previews */
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* --- Larger, Clearer Buttons --- */
+.form-actions-simple {
+  display: flex;
+  flex-direction: column; /* Stack buttons on mobile */
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.back-button, .submit-button {
+  width: 100%;
+  padding: 1rem; /* Larger padding */
+  font-size: 1.2rem; /* Larger font */
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid var(--primary-dark-green);
+}
+
+.back-button {
+  background-color: #fff;
+  color: var(--primary-dark-green);
+}
+
+.submit-button {
+  background-color: var(--primary-dark-green);
+  color: #fff;
+}

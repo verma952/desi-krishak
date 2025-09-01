@@ -1,3 +1,5 @@
+// backend/models/productModel.js - Refactored
+
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
@@ -9,10 +11,12 @@ const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    trim: true, // ✅ Removes whitespace from the beginning and end
   },
   price: {
     type: Number,
     required: true,
+    min: 0, // ✅ Price cannot be negative
   },
   phone: {
     type: String,
@@ -29,15 +33,26 @@ const productSchema = new mongoose.Schema({
   subType: {
     type: String,
   },
+  // ✅ CRITICAL: Changed to GeoJSON format for location queries
   location: {
-    type: Object,
-    required: true,
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point',
+      required: true
+    },
+    coordinates: {
+      type: [Number], // Array of numbers for [longitude, latitude]
+      required: true
+    }
   },
   productType: {
     type: String,
-    enum: ['cattle', 'dairy', 'farmingTools', 'other'],
+    // ✅ Expanded enum to match frontend categories for consistency
+    enum: ['cattle', 'dairy', 'equipment', 'grains', 'vegetables', 'other'],
     required: true,
   },
+
   milkProductionLitersPerDay: {
     type: Number,
     required: function () {
@@ -46,7 +61,10 @@ const productSchema = new mongoose.Schema({
   },
   images: [String]
 }, {
-  timestamps: true // ✅ Correct usage
+  timestamps: true
 });
 
-module.exports = mongoose.model('Product', productSchema); // ✅ Use this line
+// ✅ CRITICAL: Add the 2dsphere index for location-based searching
+productSchema.index({ location: '2dsphere' });
+
+module.exports = mongoose.model('Product', productSchema);

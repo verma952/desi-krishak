@@ -1,90 +1,155 @@
-/* BodySpace.css */
+/* src/components/BodySpace.css - Refactored */
 
-.homepage {
-    font-family: 'Segoe UI', sans-serif;
-  }
-  
-  /* Hero Section */
-  .hero {
-    background-image: url('/images/banner.jpg'); /* Add your own banner image */
-    background-size: cover;
-    background-position: center;
-    color: rgb(223, 114, 56);
-    text-align: center;
-    border-radius: 0 0 30px 30px;
-  }
-  
-  .hero-content h1 {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .hero-content p {
-    font-size: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .cta-button {
-    background-color: #27ae60;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background 0.3s ease;
-  }
-  
-  .cta-button:hover {
-    background-color: #70ad89;
-  }
-  
-  /* Category Section */
-  .categories {
-    text-align: center;
-    padding: 20px 10px;
-  }
-  
-  .categories h2 {
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-  
-  .category-links {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .category-tile {
-    background-color: #f1f1f1;
-    padding: 10px 15px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #2d3436;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    min-width: 110px;
-  }
-  
-  .category-tile:hover {
-    background-color: #dfe6e9;
-  }
-  
-  /* Featured Products */
-  .featured {
-    padding: 40px 20px;
-    background-color: #fafafa;
-  }
-  
-  .featured h2 {
-    text-align: center;
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-  .product-list {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
+/* --- Hero Section --- */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 40vh;
+  padding: 2rem;
+  background-image: url('/images/banner.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for text readability */
+}
+
+.hero-content {
+  position: relative; /* To appear above the overlay */
+  z-index: 2;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-cta {
+  background-color: var(--accent-orange);
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.hero-cta:hover {
+  background-color: #e5924a;
+}
+
+
+/* --- Categories Section --- */
+.categories-section {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.categories-section h2, .nearby-products-section h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-dark-green);
+  margin-bottom: 2rem;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease,box-shadow 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.category-card span {
+  font-size: 1rem;
+}
+
+.category-card {
+  font-size: 3rem; /* Emoji size */
+}
+
+
+/* --- Nearby Products Section --- */
+.nearby-products-section {
+  padding: 2rem 1rem;
+  background-color: var(--background-light);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-message {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 3rem;
+  color: #666;
+}
+.info-message.error {
+  color: #d32f2f;
+}
+.category-card {
+  gap: 0.5rem; /* Adjusts space between icon and text */
+}
+
+.category-card-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.category-card .hindi-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+/* Also, update the main category card text style */
+.category-card span {
+  font-size: 1rem;
+  font-weight: 600; /* Re-apply from previous CSS */
+}

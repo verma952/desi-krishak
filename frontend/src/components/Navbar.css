@@ -1,113 +1,127 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #113fa9;
-    color: white;
-    padding: 5px 10px;
-    flex-wrap: wrap;
-    font-family:Arial, Helvetica, sans-serif;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+/* src/components/Navbar.css - Refactored */
+
+/* ✅ Define our color palette for easy reuse */
+:root {
+  --primary-green: #2a9d8f;
+  --primary-dark-green: #264653;
+  --accent-orange: #f4a261;
+  --accent-yellow: #e9c46a;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+  --background-light: #f7f7f7;
 }
 
-.navbar-logo {
-    text-decoration: none;
-    width: 60px;
-    height: 60px;
+/* --- Main Header Styles --- */
+.navbar-header {
+  background-color: var(--background-light);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
-.logo-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
+.navbar-logo img {
+  height: 50px; /* A consistent height */
+  width: auto;
+  border-radius: 50%;
+}
+
+.searchbar-container {
+  flex-grow: 1;
+  margin: 0 2rem;
+  max-width: 400px;
+}
+
+/* --- Navigation Links --- */
 .navbar-links {
-    gap: 0px;
-    align-items: center;
-    margin-right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Cleaner spacing */
 }
 
 .navbar-links a {
-    padding: 8px 14px;
-    background-color: #2e6df4;
-    border-radius: 8px;
-    text-decoration: none;
-    color: rgb(245, 245, 245);
-    font-size: 14px;
-    font-weight: 500;
-    transition: background-color 0.3s;
-    margin-left:10px ;
-    
-
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 500;
+  font-size: 16px;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.2s ease-in-out;
 }
 
 .navbar-links a:hover {
-    background-color: #d08c26; /* Green on hover */
-    color: white;
+  color: var(--primary-green);
 }
+
+/* ✅ This special class provided by NavLink makes styling the active link simple */
 .navbar-links a.active {
-    background-color: #4CAF50;
-    color: white;
+  color: var(--primary-green);
+  font-weight: 700;
 }
 
+/* ✅ The primary Call-to-Action button */
+.sell-button {
+  background-color: var(--accent-orange);
+  color: var(--text-light) !important; /* Use !important to override other link styles */
+  padding: 0.6rem 1.5rem !important; /* Use !important to override other link styles */
+  border-radius: 8px;
+  font-weight: 700 !important;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.sell-button:hover {
+  background-color: #e5924a; /* A slightly darker orange */
+}
+
+/* --- Mobile Styles --- */
 .navbar-toggle {
-    display: none;
-    font-size: 24px;
+  display: none; /* Hidden by default on desktop */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-dark-green);
 }
 
-/* Responsive rules */
+
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        height: 40px;
-        
-    }
-    .navbar-logo {
-        width: 40px;
-        height: 40px;
-    }
+  .navbar-toggle {
+    display: block; /* Show hamburger menu */
+    z-index: 10;
+  }
 
-    .navbar-toggle {
-        display: block;
-        cursor: pointer;
-        margin-left: auto;
-        margin-right: 10px;
-        color: white;
-    }
+  .navbar-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
 
-    .navbar-links {
-        flex-direction: column;
-        position: absolute;
-        right:25%;
-        width: 30%;
-        display: none; /* Hidden by default on mobile */
-        z-index: 1;
-        float: right;
-        margin-top: 40px;
-        margin-right: -80px;
-        border-radius: 10px;
-        padding: 10px;
-        background-color: #081dbc; 
-    }
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 6rem 2rem 2rem;
+    gap: 1.5rem;
+    
+    /* Smooth slide-in animation */
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
 
-    .navbar-links.show {
-        display: flex;
-    }
+  .navbar-links.show {
+    transform: translateX(0);
+  }
 
-    .navbar-links a {
-        margin: 1px;
-        padding: 10px;
-        font-size: 14px;
-        width: 90%;
-    }
-    .searchbar {
-        display: flex;
-        align-self: first baseline;
-        width: 30%;
-        border-radius: 8px;
-        position:relative;
-        margin:auto;
-        
-    }
+  .sell-button {
+    margin-top: 1rem;
+  }
 }

@@ -1,66 +1,64 @@
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import React, { useState, useEffect } from "react";
+// App.js - Refactored without ProtectedRoute
 
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Terms from "./components/policies/Terms";
-import Privacy from "./components/policies/Privacy";
-import Refund from "./components/policies/Refund";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from "react";
+
+// Context Providers
+import {SearchProvider} from "./components/context/SearchContext";
+import { AuthProvider } from "./components/context/AuthContext";
+import SearchResults from './components/SearchResults';
+// New Layout Component
+import Layout from "./components/Layout";
+
+// Page Components
 import BodySpace from "./components/BodySpace";
 import Sell from "./components/Sell/Sell";
 import Login from "./components/Login";
 import Products from "./components/Products";
 import About from "./components/About";
-import Loader from "./components/smallComponents/Loader";
-import ChatBot from "./components/ChatBox/ChatBox";
 import Profile from "./components/smallComponents/Profile";
-import { SearchProvider } from "./components/context/SearchContext";
-import { AuthProvider } from "./components/context/AuthContext";
 import CategoryProducts from "./components/CategoryProducts";
 import ProductDetails from "./components/smallComponents/ProductDetails";
+
+
+// Policy Pages
+import Terms from "./components/policies/Terms";
+import Privacy from "./components/policies/Privacy";
+import Refund from "./components/policies/Refund";
+
 function App() {
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading for 1.5 seconds
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  
   return (
     <Router>
-    <SearchProvider>
-    <Navbar />
-    <Routes>
-      <Route path="/" element={loading ? <Loader/>:<BodySpace />} />
-  
-      <Route path="/sell" element={loading ? <Loader/>:
-       <AuthProvider>
-      <Sell />
-        </AuthProvider>} />
+      <AuthProvider>
+        <SearchProvider>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              {/* Main Pages */}
+              <Route index element={<BodySpace />} />
+              <Route path="about" element={<About />} />
+              <Route path="login" element={<Login />} />
+              <Route path="products" element={<Products />} />
+              <Route path="products/:category" element={<CategoryProducts />} />
+              <Route path="product/:productId" element={<ProductDetails />} />
+              
+              {/* Unprotected Routes (for now) */}
+              <Route path="sell" element={<Sell />} />
+              <Route path="profile" element={<Profile />} />
 
-      <Route path = "/login" element={loading ? <Loader/>:<Login />} />
-      <Route path="/products" element={loading ? <Loader/>:<Products />} />
-      <Route path="/about" element={loading ? <Loader/>:<About/>} />
-      <Route path="/buy" element={loading ? <Loader/>:<BodySpace />} />
-      <Route path="/profile" element={loading ? <Loader/>:<Profile />}/>
-      <Route path="/terms" element={loading ? <Loader/>:<Terms />} />
-      <Route path="/privacy" element={loading ? <Loader/>:<Privacy />} />
-      <Route path="/refund" element={loading ? <Loader/>:<Refund />} />
-      <Route path="/products/:category" element={loading ? <Loader/>:<CategoryProducts />} />
-      <Route path="*" element={loading ? <Loader/>:<BodySpace />} />
-     <Route path="/product/:productId" element={<ProductDetails />} />
-    </Routes>
-      <ChatBot></ChatBot>
-    <Footer />
-    </SearchProvider>
+              {/* Policy Pages */}
+              <Route path="terms" element={<Terms />} />
+              <Route path="privacy" element={<Privacy />} />
+              <Route path="refund" element={<Refund />} />
+              
+              {/* Fallback Route */}
+              <Route path="*" element={<BodySpace />} />
+              </Route>
+              <Route path="search" element={<SearchResults />} />
+          </Routes>
+        </SearchProvider>
+      </AuthProvider>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,16 @@
+/* src/components/SearchResults.css */
+
+.search-results-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  min-height: 60vh;
+}
+
+.search-results-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-dark-green);
+  margin-bottom: 2.5rem;
+}

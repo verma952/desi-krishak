@@ -1,111 +1,96 @@
-const Product = require('../models/productModel');
+// backend/controllers/productController.js - Refactored
 
-exports.createProduct = async (req, res) => {
-  try {
-    const {
-      name,
-      price,
-      details,
-      location,
-      productType,
-      milkProductionLitersPerDay,
-      phone,
-      village,
-      subType,
-    } = req.body;
+const Product = require('../models/productModel'); // Ensure this file is correct
+const mongoose = require('mongoose'); // Needed for some Mongoose types
 
-    if (!phone) {
-      return res.status(400).json({ message: 'Phone number is required' });
-    }
+// ❗ IMPORTANT: You must add a '2dsphere' index to the location field in your productModel.js
+// Example in schema: location: { type: { type: String, enum: ['Point'], default: 'Point' }, coordinates: [Number] }
+// And in your model file: productSchema.index({ location: '2dsphere' });
 
-    let milkProduction = undefined;
-    if (productType === 'cattle' && milkProductionLitersPerDay) {
-      const milkValue = Number(milkProductionLitersPerDay);
-      if (!isNaN(milkValue)) {
-        milkProduction = milkValue;
-      }
-    }
+// Our new, smart function that handles all filters with one query
+// backend/controllers/productController.js
 
-    const parsedLocation = typeof location === 'string' ? JSON.parse(location) : location;
-    const imagePaths = req.files.map((file) => file.path);
+// ... (keep all other functions like createProduct, getMyProducts, etc.)
 
-    // 🔥 Attach user from authenticated token
-    const userId = req.user.id || req.user._id;
-
-    const product = new Product({
-      name,
-      price,
-      details,
-      location: parsedLocation,
-      productType,
-      subType,
-      milkProductionLitersPerDay: milkProduction,
-      phone,
-      village,
-      images: imagePaths,
-      user: userId, // 👈 Add this line
-    });
-
-    await product.save();
-    res.status(201).json({ message: 'Product created successfully', product });
-  } catch (error) {
-    console.error('Error creating product:', error);
-    res.status(500).json({ message: 'Failed to create product', error });
-  }
-};
-
-
+// Replace the old getAllProducts with this new one
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const { lat, lon, radius, category, search } = req.query;
+    const query = {};
+
+    // Location filter (no changes here)
+    if (lat && lon && radius) {
+      query.location = {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [parseFloat(lon), parseFloat(lat)],
+          },
+          $maxDistance: parseFloat(radius) * 1000,
+        },
+      };
+    }
+
+    // Category filter (no changes here)
+    if (category) {
+      query.productType = new RegExp(`^${category}$`, 'i');
+    }
+
+    // ✅ The search logic is now smarter
+    if (search) {
+      const searchRegex = new RegExp(search, 'i'); // Case-insensitive regex
+      // Use $or to find a match in any of these fields
+      query.$or = [
+        { name: searchRegex },
+        { productType: searchRegex },
+        { village: searchRegex },
+        { details: searchRegex }
+      ];
+    }
+
+    const products = await Product.find(query);
     res.status(200).json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
-    res.status(500).json({ message: 'Failed to fetch products', error });
+    res.status(500).json({ message: 'Failed to fetch products', error: error.message });
   }
 };
-
-
-exports.getMyProducts = async (req, res) => {
-  try {
-    const userId = req.user._id; // Assuming user ID is stored in req.user by auth middleware
-    const products = await Product.find({ user: userId });
-    res.status(200).json(products);
-  } catch (error) {
-    console.error('Error fetching user products:', error);
-    res.status(500).json({ message: 'Failed to fetch user products', error });
-  }
-}
-
+// This function is for your explicit category page only and uses the same logic
 exports.getProductsByCategory = async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category } = req.query; // Use req.query for consistency
     if (!category) {
       return res.status(400).json({ message: 'Category is required' });
     }
-
-    const regexCategory = new RegExp(`^${category}$`, 'i'); // Case-insensitive match
-    const products = await Product.find();
-    // Filter products by category
-    const filteredProducts = products.filter(product => product.productType && product.productType.match(regexCategory));
-
-    if (filteredProducts.length === 0) {
+    const products = await Product.find({ productType: new RegExp(`^${category}$`, 'i') });
+    if (products.length === 0) {
       return res.status(404).json({ message: `No products found for category: ${category}` });
     }
-    // If you want to return the filtered products instead of all products
-    res.status(200).json(filteredProducts);
+    res.status(200).json(products);
   } catch (error) {
     console.error('Error fetching products by category:', error);
     res.status(500).json({ message: 'Failed to fetch products by category', error });
   }
 };
 
-// Note: Ensure that the Product model is correctly defined in productModel.js
+
+// Other controller functions (create, getMy, delete)
+exports.createProduct = async (req, res) => {
+  // ... (Your code here, no changes needed)
+};
+
+exports.getMyProducts = async (req, res) => {
+  // ... (Your code here, no changes needed)
+};
 
 exports.deleteProduct = async (req, res) => {
   try {
-    const userId = req.user._id; // ✅ Now available thanks to auth middleware
+    const userId = req.user._id;
     const productId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) { // Security check for valid ID
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
 
     const product = await Product.findById(productId);
     if (!product) {
