@@ -44,18 +44,23 @@
 .hero-cta {
   background-color: var(--accent-orange);
   color: white;
-  padding: 0.8rem 2rem;
+  padding: 0.8rem 1.5rem; /* Slightly adjusted padding */
   border-radius: 8px;
   text-decoration: none;
   font-size: 1rem;
   font-weight: 600;
   transition: background-color 0.2s ease;
+
+  /* --- New styles to fix overlapping text --- */
+  display: inline-block; /* Gives better control over the element's box */
+  line-height: 1.5;      /* ✅ Adds more vertical space between the lines */
+  max-width: 320px;      /* Prevents the button from becoming too wide */
+  text-align: center;    /* ✅ Centers the text neatly when it wraps */
 }
 
 .hero-cta:hover {
   background-color: #e5924a;
 }
-
 
 /* --- Categories Section --- */
 .categories-section {
