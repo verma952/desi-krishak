@@ -71,17 +71,6 @@
   left: 6.0rem;
   z-index: 4;
 }
-.tractor-body-front span{
-  font-size: 9px;
-  text-align: center;
-  position: relative;
-  left: 1.5rem;
-  color:rgb(44, 82, 48);
-  background-color: rgb(217, 207, 197);
-  padding:0.05rem;
-  border: 0.0rem solid black;
-  border-radius: .1rem;
-}
 .tractor-headlight {
   width: 0.75rem;
   height: 0.75rem;
