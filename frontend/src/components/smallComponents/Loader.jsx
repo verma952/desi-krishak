@@ -9,7 +9,9 @@ function Loader() {
       <div className="tractor-loader-improved">
         <div className="tractor-chassis">
           <div className="tractor-cab"></div>
-          <div className="tractor-body-front"></div>
+          <div className="tractor-body-front">
+           <span>DesiKrishak</span>
+          </div>
           <div className="tractor-chimney"></div>
           <div className="tractor-headlight"></div>
         </div>

@@ -19,7 +19,7 @@ import About from "./components/About";
 import Profile from "./components/smallComponents/Profile";
 import CategoryProducts from "./components/CategoryProducts";
 import ProductDetails from "./components/smallComponents/ProductDetails";
-
+import Loader from "./components/smallComponents/Loader";
 
 // Policy Pages
 import Terms from "./components/policies/Terms";
@@ -55,6 +55,7 @@ function App() {
               </Route>
               <Route path="search" element={<SearchResults />} />
           </Routes>
+        
         </SearchProvider>
       </AuthProvider>
     </Router>

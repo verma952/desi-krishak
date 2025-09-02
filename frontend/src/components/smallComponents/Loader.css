@@ -1,4 +1,4 @@
-/* src/components/smallComponents/Loader.css - FIX for Swapped Tyres */
+ 
 
 .loader-container {
   display: flex;
@@ -39,13 +39,13 @@
 
 /* Tractor Body Parts */
 .tractor-cab {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.8rem;
+  height: 3.5rem;
   background-color: var(--primary-dark-green);
   border-radius: 0.5rem 0.5rem 0 0;
   position: absolute;
-  top: 1rem;
-  left: 2rem; /* Positioned over the back wheel */
+  top: 0rem;
+  left: 1.3rem; /* Positioned over the back wheel */
   z-index: 3;
 }
 
@@ -60,6 +60,7 @@
   z-index: 2;
 }
 
+
 .tractor-chimney {
   width: 0.5rem;
   height: 1.5rem;
@@ -67,19 +68,29 @@
   border-radius: 0.25rem 0.25rem 0 0;
   position: absolute;
   top: 0.5rem;
-  left: 4.5rem;
+  left: 6.0rem;
   z-index: 4;
 }
-
+.tractor-body-front span{
+  font-size: 9px;
+  text-align: center;
+  position: relative;
+  left: 1.5rem;
+  color:rgb(44, 82, 48);
+  background-color: rgb(217, 207, 197);
+  padding:0.05rem;
+  border: 0.0rem solid black;
+  border-radius: .1rem;
+}
 .tractor-headlight {
   width: 0.75rem;
   height: 0.75rem;
   background-color: var(--accent-yellow);
   border-radius: 50%;
   position: absolute;
-  top: 3rem;
-  left: 7.8rem; /* Positioned at the very front */
-  z-index: 4;
+  top: 2.7rem;
+  left: 7.4rem; /* Positioned at the very front */
+  z-index: 0;
 }
 
 /* Wheels */
@@ -97,13 +108,13 @@
   width: 3.5rem;
   height: 3.5rem;
   left: 0.5rem;
-  z-index: 1; /* Behind the tractor body */
+  z-index: 3; /* Behind the tractor body */
 }
 
 .front-wheel {
   /* ✅ Small wheel, positioned at the front */
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   left: 6rem;
   z-index: 3; /* In front of the tractor body */
 }

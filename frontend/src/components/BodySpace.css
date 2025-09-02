@@ -1,6 +1,3 @@
-/* src/components/BodySpace.css - Refactored */
-
-/* --- Hero Section --- */
 .hero {
   position: relative;
   display: flex;
@@ -44,18 +41,16 @@
 .hero-cta {
   background-color: var(--accent-orange);
   color: white;
-  padding: 0.8rem 1.5rem; /* Slightly adjusted padding */
+  padding: 0.8rem 1.5rem;
   border-radius: 8px;
   text-decoration: none;
   font-size: 1rem;
   font-weight: 600;
   transition: background-color 0.2s ease;
-
-  /* --- New styles to fix overlapping text --- */
-  display: inline-block; /* Gives better control over the element's box */
-  line-height: 1.5;      /* ✅ Adds more vertical space between the lines */
-  max-width: 320px;      /* Prevents the button from becoming too wide */
-  text-align: center;    /* ✅ Centers the text neatly when it wraps */
+  display: inline-block;
+  line-height: 1.5;
+  max-width: 320px;
+  text-align: center;
 }
 
 .hero-cta:hover {
@@ -68,7 +63,8 @@
   text-align: center;
 }
 
-.categories-section h2, .nearby-products-section h2 {
+.categories-section h2,
+.nearby-products-section h2 {
   font-size: 2rem;
   font-weight: 600;
   color: var(--primary-dark-green);
@@ -88,15 +84,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.8rem;
   padding: 1.5rem;
   background-color: #fff;
   border-radius: 12px;
   text-decoration: none;
   color: var(--text-dark);
-  font-weight: 600;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease,box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 3rem; /* Emoji size */
+  gap: 0.5rem; /* ✅ CLEANUP: Merged from the duplicate rule below */
 }
 
 .category-card:hover {
@@ -104,12 +100,22 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
-.category-card span {
-  font-size: 1rem;
+/* ✅ CLEANUP: Moved all category-related styles together */
+.category-card-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
 }
 
-.category-card {
-  font-size: 3rem; /* Emoji size */
+.category-card span {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.category-card .hindi-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
 }
 
 
@@ -133,28 +139,7 @@
   padding: 3rem;
   color: #666;
 }
+
 .info-message.error {
   color: #d32f2f;
-}
-.category-card {
-  gap: 0.5rem; /* Adjusts space between icon and text */
-}
-
-.category-card-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.3;
-  font-weight: 600;
-}
-
-.category-card .hindi-label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #555;
-}
-
-/* Also, update the main category card text style */
-.category-card span {
-  font-size: 1rem;
-  font-weight: 600; /* Re-apply from previous CSS */
 }

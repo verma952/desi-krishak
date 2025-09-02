@@ -1,40 +1,69 @@
-// src/components/Profile.jsx - Refactored
+// src/components/Profile.jsx - Updated & Enhanced
 
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import "./Profile.css";
-import ProductList from "../ProductList"; // ✅ Use the ProductList component
-import Loader from "./Loader";
+import ProductList from "../ProductList";
+import Loader from "./Loader"; // Assuming Loader is in smallComponents
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Profile = () => {
-    const { user, login, logout } = useContext(AuthContext); // Get logout from context
+    const { user, login, logout } = useContext(AuthContext);
+
+    // ✅ ENHANCEMENT: Initialize profile state directly from the user context
+    const [profile, setProfile] = useState({
+        name: user?.name || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
+        address: user?.address || "",
+    });
+
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [profile, setProfile] = useState({ name: "", phone: "", address: "" });
+    const [loadingProducts, setLoadingProducts] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false); // ✅ ENHANCEMENT: For form submission state
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
 
     useEffect(() => {
+        // Fetch products only when the user is available
         if (user?.email) {
-            setProfile({
-                name: user.name || "",
-                email: user.email,
-                phone: user.phone || "",
-                address: user.address || "",
-            });
             fetchUserProducts();
         }
-    }, [user]);
+    }, [user]); // Effect still depends on user, which is correct
 
+    // ✅ ENHANCEMENT: Completed the fetchUserProducts function
     const fetchUserProducts = async () => {
-        // ... (fetchUserProducts logic remains the same)
+        setLoadingProducts(true);
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.get(`${API_URL}/api/products/my-products`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setProducts(response.data);
+        } catch (err) {
+            console.error("Error fetching user products:", err);
+        } finally {
+            setLoadingProducts(false);
+        }
     };
 
+    // ✅ ENHANCEMENT: Completed the handleDelete function
     const handleDelete = async (productId) => {
-        // ... (handleDelete logic remains the same)
+        if (window.confirm("Are you sure you want to delete this product? / क्या आप वाकई इस उत्पाद को हटाना चाहते हैं?")) {
+            try {
+                const token = localStorage.getItem("token");
+                await axios.delete(`${API_URL}/api/products/${productId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                // Remove the deleted product from the local state to update the UI instantly
+                setProducts((prevProducts) => prevProducts.filter((p) => p._id !== productId));
+            } catch (err) {
+                console.error("Failed to delete product:", err);
+                alert("Failed to delete product. Please try again.");
+            }
+        }
     };
     
     const handleChange = (e) => {
@@ -45,25 +74,41 @@ const Profile = () => {
         e.preventDefault();
         setError("");
         setMessage("");
+        setIsSubmitting(true); // ✅ ENHANCEMENT: Set submitting state to true
+
         try {
             const token = localStorage.getItem("token");
             const res = await axios.put(`${API_URL}/api/users/profile`, profile, {
                 headers: { Authorization: `Bearer ${token}` },
             });
+            
+            // The API should return the updated user object
+            const updatedUser = res.data.user || res.data;
+            login(updatedUser, token); // Update context with the new profile
+
             setMessage("Profile updated successfully! / प्रोफ़ाइल सफलतापूर्वक अपडेट हो गई!");
-            login(res.data.user, token); // Update context with new profile
+
+            // ✅ ENHANCEMENT: Clear the message after 4 seconds
+            setTimeout(() => setMessage(""), 4000);
+
         } catch (err) {
             setError("Failed to update profile. / प्रोफ़ाइल अपडेट करने में विफल।");
+             // ✅ ENHANCEMENT: Clear the error after 4 seconds
+            setTimeout(() => setError(""), 4000);
+        } finally {
+            setIsSubmitting(false); // ✅ ENHANCEMENT: Revert submitting state
         }
     };
 
     const handleLogout = () => {
         if (window.confirm("Are you sure you want to logout? / क्या आप वाकई लॉगआउट करना चाहते हैं?")) {
-            logout(); // Use logout from context
+            logout();
         }
     };
 
-    if (!user) return <p>Please login to view your profile. / अपनी प्रोफ़ाइल देखने के लिए कृपया लॉग इन करें।</p>;
+    if (!user) {
+        return <p>Please login to view your profile. / अपनी प्रोफ़ाइल देखने के लिए कृपया लॉग इन करें।</p>;
+    }
 
     return (
         <div className="profile-page-container">
@@ -89,7 +134,10 @@ const Profile = () => {
                             <textarea id="address" name="address" value={profile.address} onChange={handleChange}></textarea>
                         </div>
 
-                        <button type="submit" className="update-btn">Update Profile / प्रोफ़ाइल अपडेट करें</button>
+                        {/* ✅ ENHANCEMENT: Button now shows submitting state */}
+                        <button type="submit" className="update-btn" disabled={isSubmitting}>
+                            {isSubmitting ? 'Saving... / सहेज रहा है...' : 'Update Profile / प्रोफ़ाइल अपडेट करें'}
+                        </button>
                         
                         {message && <p className="success-message">{message}</p>}
                         {error && <p className="error-message">{error}</p>}
@@ -100,10 +148,9 @@ const Profile = () => {
                 {/* Right Column: My Listings */}
                 <div className="my-listings-section">
                     <h2>My Listings / मेरी लिस्टिंग</h2>
-                    {loading ? (
+                    {loadingProducts ? (
                         <Loader />
                     ) : (
-                        // ✅ Correctly use ProductList to display the products
                         <ProductList products={products} onDelete={handleDelete} showMyProducts={true} />
                     )}
                 </div>

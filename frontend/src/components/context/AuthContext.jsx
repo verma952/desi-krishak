@@ -1,43 +1,72 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(null);
+
+// ✅ A safe function to get initial state and prevent crashes
+const getInitialAuthState = () => {
+  try {
+    const token = localStorage.getItem('desiKrishak_token');
+    const userString = localStorage.getItem('desiKrishak_user');
+    
+    // If token or user data doesn't exist, they are not logged in
+    if (!token || !userString) {
+      return { user: null, token: null };
+    }
+
+    const user = JSON.parse(userString);
+    return { user, token };
+
+  } catch (error) {
+    console.error("Failed to parse auth data from localStorage", error);
+    // Clean up corrupted data if parsing fails
+    localStorage.removeItem('desiKrishak_user');
+    localStorage.removeItem('desiKrishak_token');
+    return { user: null, token: null };
+  }
+};
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null); // NEW
+  const [authState, setAuthState] = useState(getInitialAuthState());
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const storedToken = localStorage.getItem('token'); // NEW
-
-    if (storedUser) setUser(JSON.parse(storedUser));
-    if (storedToken) setToken(storedToken); // NEW
-  }, []);
-
-  const login = (userData) => {
-    localStorage.setItem('user', JSON.stringify(userData));
-    if (userData.token) {
-      localStorage.setItem('token', userData.token);
-      setToken(userData.token);
-    }
-    setUser(userData);
+  // ✅ Standardized login function to accept user and token separately
+  const login = (user, token) => {
+    // Set state
+    setAuthState({ user, token });
+    // Persist to localStorage
+    localStorage.setItem('desiKrishak_user', JSON.stringify(user));
+    localStorage.setItem('desiKrishak_token', token);
   };
 
   const logout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    setUser(null);
-    setToken(null);
+    // Clear state
+    setAuthState({ user: null, token: null });
+    // Clear from localStorage
+    localStorage.removeItem('desiKrishak_user');
+    localStorage.removeItem('desiKrishak_token');
   };
 
-  const updateUser = (newData) => {
-    const updatedUser = { ...user, ...newData };
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+  // ✅ This is useful for updating user info without needing a new token
+  const updateUser = (newUserData) => {
+    setAuthState(prevState => {
+      // Merge new data with the existing user object
+      const updatedUser = { ...prevState.user, ...newUserData };
+      // Persist the updated user object to localStorage
+      localStorage.setItem('desiKrishak_user', JSON.stringify(updatedUser));
+      // Return the new state
+      return { ...prevState, user: updatedUser };
+    });
+  };
+
+  // The value provided to the context consumers
+  const contextValue = {
+    ...authState, // Provides `user` and `token` directly
+    login,
+    logout,
+    updateUser,
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, updateUser }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
