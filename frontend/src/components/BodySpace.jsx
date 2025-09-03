@@ -45,6 +45,14 @@ function BodySpace() {
     }
   };
 
+   const formatDistance = (km) => {
+    if (km == null) return null; // Handle cases where distance doesn't exist
+    if (km < 1) {
+      const meters = Math.round(km * 1000);
+      return `${meters} m`; // Show in meters if close
+    }
+    return `${km.toFixed(1)} km`; // Show in kilometers if far
+  };
   const renderContent = () => {
     if (loading) {
       return <Loader />;
@@ -56,7 +64,8 @@ function BodySpace() {
       return (
         <div className="product-grid">
           {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
+            <ProductCard key={product._id} product={product}
+            distance={formatDistance(product.distance)} />
           ))}
         </div>
       );

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ProductList from './ProductList';
 import Loader from './smallComponents/Loader';
-import { getDistanceInKm } from '../utils/location'; // Import our utility function
+import { getDistance} from '../utils/distance'; // Import our utility function
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -51,7 +51,7 @@ function CategoryProducts() {
         if (userLocation) {
           productsWithDistance = response.data.map(product => {
             if (product.location?.coordinates) {
-              const distance = getDistanceInKm(
+              const distance = getDistance(
                 userLocation.latitude,
                 userLocation.longitude,
                 product.location.coordinates[1], // Latitude

@@ -1,57 +1,75 @@
-// src/components/ProductDetails.js - Refactored
+// src/components/ProductDetails.js
 
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import './ProductDetails.css';
-import Loader from './Loader'; // Assuming you have a Loader component
+import Loader from './Loader';
+import { getDistance } from "../../utils/distance";
+import { getCurrentLocation } from "../../utils/location";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 function ProductDetails() {
-  const { productId } = useParams(); // 1. Get product ID from the URL
+  const { productId } = useParams();
   const { state } = useLocation();
-  const navigate = useNavigate();
-
-  const [product, setProduct] = useState(state?.product || null); // Use passed state initially if available
-  const [loading, setLoading] = useState(!state?.product); // Start loading if no initial data
+  
+  const [product, setProduct] = useState(state?.product || null);
+  const [loading, setLoading] = useState(!state?.product);
   const [error, setError] = useState(null);
-  const [activeImage, setActiveImage] = useState(0); // Index of the main image
+  const [activeImage, setActiveImage] = useState(0);
+  const [distance, setDistance] = useState(null);
 
   useEffect(() => {
-    // 2. Fetch data if we don't have it, ensuring the page works on refresh
-    if (!product) {
-      fetch(`${API_URL}/api/products/${productId}`)
-        .then(res => {
-          if (!res.ok) throw new Error('Product not found');
-          return res.json();
-        })
-        .then(data => {
-          setProduct(data);
-          setError(null);
-        })
-        .catch(err => {
-          console.error("Fetch error:", err);
-          setError("Could not load product details. It may have been removed.");
-        })
-        .finally(() => setLoading(false));
-    }
+    const fetchProductAndDistance = async () => {
+      try {
+        let productData = product;
+        if (!productData) {
+          const response = await fetch(`${API_URL}/api/products/${productId}`);
+          if (!response.ok) throw new Error('Product not found');
+          productData = await response.json();
+          setProduct(productData);
+        }
+
+        const userLocation = await getCurrentLocation();
+
+        if (productData.location?.coordinates) {
+          const calculatedDistance = getDistance(
+            userLocation.lat,
+            userLocation.lon,
+            productData.location.coordinates[1],
+            productData.location.coordinates[0]
+          );
+          setDistance(calculatedDistance);
+        }
+        setError(null);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        // ✅ HINDI ADDED
+        setError("प्रोडक्ट की जानकारी लोड नहीं हो सकी। हो सकता है इसे हटा दिया गया हो। (Could not load product details. It may have been removed.)");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductAndDistance();
   }, [productId, product]);
 
   if (loading) return <Loader />;
   if (error) return <p className="error-message">{error}</p>;
-  if (!product) return null; // Should be handled by loading/error states
+  if (!product) return null;
 
   const { name, price, productType, details, phone, village, images, location, user } = product;
-
-  // 3. Corrected Google Maps link
-  const mapLink = location ? `https://maps.google.com/?q=${location.latitude},${location.longitude}` : null;
+  
+  const mapLink = location?.coordinates
+    ? `https://www.google.com/maps/search/?api=1&query=${location.coordinates[1]},${location.coordinates[0]}`
+    : null;
+    
   const whatsappLink = `https://wa.me/91${phone.replace(/\D/g, '')}?text=Hi, I'm interested in your product "${name}" listed on DesiKrishak.`;
-  const mainImageUrl = images && images.length > 0 ? `${API_URL}/${images[activeImage].replace(/\\/g, '/')}` : "/images/default.jpg";
+  const mainImageUrl = images?.length > 0 ? `${API_URL}/${images[activeImage].replace(/\\/g, '/')}` : "/images/default.jpg";
 
   return (
-    <div className="product-details-container">
-      <div className="product-details-grid">
-        {/* Left Column: Image Gallery */}
+    <div className="details-page-container">
+      <div className="details-grid">
         <div className="gallery-container">
           <div className="main-image-wrapper">
             <img src={mainImageUrl} alt={name} />
@@ -69,31 +87,45 @@ function ProductDetails() {
           </div>
         </div>
 
-        {/* Right Column: Product Information */}
         <div className="info-container">
-          <p className="product-type-label">{productType}</p>
+          <span className="product-type-label">{productType}</span>
           <h1 className="product-title">{name}</h1>
+          
+          {distance && (
+            <p className="product-distance">
+              {/* ✅ HINDI ADDED */}
+              📍 आपकी लोकेशन से करीब <strong>{distance} km</strong> दूर
+            </p>
+          )}
+
           <p className="product-price-details">₹{price.toLocaleString('en-IN')}</p>
           
-          <div className="details-section">
-            <h3>Description</h3>
-            <p>{details}</p>
+          <div className="info-section">
+            {/* ✅ HINDI ADDED */}
+            <h3>Description / विवरण</h3>
+            <p className="product-description">{details}</p>
           </div>
 
-          <div className="details-section owner-info">
-            <h3>Seller Information</h3>
-            <p><strong>Name:</strong> {user?.name || "N/A"}</p>
-            <p><strong>Location:</strong> 🏡 {village}</p>
-            {mapLink && (
-              <a href={mapLink} target="_blank" rel="noopener noreferrer" className="map-link">
-                📍 View on Map
-              </a>
-            )}
+          <div className="info-section">
+            {/* ✅ HINDI ADDED */}
+            <h3>Seller Information / विक्रेता की जानकारी</h3>
+            <div className="seller-details">
+              {/* ✅ HINDI ADDED */}
+              <p><strong>Seller / विक्रेता:</strong> {user?.name || "N/A"}</p>
+              <p><strong>Location / जगह:</strong> 🏡 {village}</p>
+              {mapLink && (
+                <a href={mapLink} target="_blank" rel="noopener noreferrer" className="map-link">
+                  {/* ✅ HINDI ADDED */}
+                  View on Map / नक्शे पर देखें
+                </a>
+              )}
+            </div>
           </div>
           
           <div className="action-buttons">
-            <a href={`tel:${phone}`} className="call-button">📞 Call Now</a>
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-button">💬 WhatsApp</a>
+            {/* ✅ HINDI ADDED */}
+            <a href={`tel:${phone}`} className="call-button">📞 Call Seller / फोन करें</a>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-button">💬 Chat on WhatsApp / व्हाट्सएप करें</a>
           </div>
         </div>
       </div>

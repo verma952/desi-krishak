@@ -1,18 +1,18 @@
-// src/components/Profile.jsx - Updated & Enhanced
-
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import "./Profile.css";
 import ProductList from "../ProductList";
-import Loader from "./Loader"; // Assuming Loader is in smallComponents
+import Loader from "./Loader";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Profile = () => {
     const { user, login, logout } = useContext(AuthContext);
 
-    // ✅ ENHANCEMENT: Initialize profile state directly from the user context
+    // ✅ EDIT MODE STATE: Controls whether the form is editable or not
+    const [isEditing, setIsEditing] = useState(false);
+
     const [profile, setProfile] = useState({
         name: user?.name || "",
         email: user?.email || "",
@@ -22,18 +22,23 @@ const Profile = () => {
 
     const [products, setProducts] = useState([]);
     const [loadingProducts, setLoadingProducts] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(false); // ✅ ENHANCEMENT: For form submission state
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
 
     useEffect(() => {
-        // Fetch products only when the user is available
-        if (user?.email) {
+        if (user) {
+            // Sync profile state if user context changes
+            setProfile({
+                name: user.name || "",
+                email: user.email || "",
+                phone: user.phone || "",
+                address: user.address || "",
+            });
             fetchUserProducts();
         }
-    }, [user]); // Effect still depends on user, which is correct
+    }, [user]);
 
-    // ✅ ENHANCEMENT: Completed the fetchUserProducts function
     const fetchUserProducts = async () => {
         setLoadingProducts(true);
         try {
@@ -49,7 +54,6 @@ const Profile = () => {
         }
     };
 
-    // ✅ ENHANCEMENT: Completed the handleDelete function
     const handleDelete = async (productId) => {
         if (window.confirm("Are you sure you want to delete this product? / क्या आप वाकई इस उत्पाद को हटाना चाहते हैं?")) {
             try {
@@ -57,7 +61,6 @@ const Profile = () => {
                 await axios.delete(`${API_URL}/api/products/${productId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                // Remove the deleted product from the local state to update the UI instantly
                 setProducts((prevProducts) => prevProducts.filter((p) => p._id !== productId));
             } catch (err) {
                 console.error("Failed to delete product:", err);
@@ -74,30 +77,37 @@ const Profile = () => {
         e.preventDefault();
         setError("");
         setMessage("");
-        setIsSubmitting(true); // ✅ ENHANCEMENT: Set submitting state to true
-
+        setIsSubmitting(true);
         try {
             const token = localStorage.getItem("token");
             const res = await axios.put(`${API_URL}/api/users/profile`, profile, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             
-            // The API should return the updated user object
             const updatedUser = res.data.user || res.data;
-            login(updatedUser, token); // Update context with the new profile
+            login(updatedUser, token);
 
-            setMessage("Profile updated successfully! / प्रोफ़ाइल सफलतापूर्वक अपडेट हो गई!");
-
-            // ✅ ENHANCEMENT: Clear the message after 4 seconds
+            setMessage("Profile updated successfully!");
+            setIsEditing(false); // ✅ EDIT MODE: Turn off edit mode on success
             setTimeout(() => setMessage(""), 4000);
-
         } catch (err) {
-            setError("Failed to update profile. / प्रोफ़ाइल अपडेट करने में विफल।");
-             // ✅ ENHANCEMENT: Clear the error after 4 seconds
+            setError("Failed to update profile.");
             setTimeout(() => setError(""), 4000);
         } finally {
-            setIsSubmitting(false); // ✅ ENHANCEMENT: Revert submitting state
+            setIsSubmitting(false);
         }
+    };
+
+    // ✅ EDIT MODE: New handler to cancel editing
+    const handleCancel = () => {
+        // Reset form to original user data
+        setProfile({
+            name: user.name || "",
+            email: user.email || "",
+            phone: user.phone || "",
+            address: user.address || "",
+        });
+        setIsEditing(false);
     };
 
     const handleLogout = () => {
@@ -113,13 +123,12 @@ const Profile = () => {
     return (
         <div className="profile-page-container">
             <div className="profile-grid">
-                {/* Left Column: Profile Form */}
                 <div className="profile-form-card">
                     <h2>Your Profile / आपकी प्रोफ़ाइल</h2>
                     <form onSubmit={handleSubmit} className="profile-form">
                         <div className="form-group">
                             <label htmlFor="name">Full Name / पूरा नाम</label>
-                            <input type="text" id="name" name="name" value={profile.name} onChange={handleChange} />
+                            <input type="text" id="name" name="name" value={profile.name} onChange={handleChange} disabled={!isEditing} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="email">Email / ईमेल</label>
@@ -127,17 +136,30 @@ const Profile = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="phone">Phone Number / फ़ोन नंबर</label>
-                            <input type="tel" id="phone" name="phone" value={profile.phone} onChange={handleChange} />
+                            <input type="tel" id="phone" name="phone" value={profile.phone} onChange={handleChange} disabled={!isEditing} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="address">Address / पता</label>
-                            <textarea id="address" name="address" value={profile.address} onChange={handleChange}></textarea>
+                            <textarea id="address" name="address" value={profile.address} onChange={handleChange} disabled={!isEditing}></textarea>
                         </div>
-
-                        {/* ✅ ENHANCEMENT: Button now shows submitting state */}
-                        <button type="submit" className="update-btn" disabled={isSubmitting}>
-                            {isSubmitting ? 'Saving... / सहेज रहा है...' : 'Update Profile / प्रोफ़ाइल अपडेट करें'}
-                        </button>
+                        
+                        {/* ✅ EDIT MODE: Conditionally render buttons */}
+                        <div className="form-actions">
+                            {isEditing ? (
+                                <>
+                                    <button type="submit" className="action-btn save-btn" disabled={isSubmitting}>
+                                        {isSubmitting ? 'Saving...' : 'Save Changes / बदलाव सेव करें'}
+                                    </button>
+                                    <button type="button" className="action-btn cancel-btn" onClick={handleCancel}>
+                                        Cancel / कैंसिल
+                                    </button>
+                                </>
+                            ) : (
+                                <button type="button" className="action-btn edit-btn" onClick={() => setIsEditing(true)}>
+                                    Edit Profile / प्रोफ़ाइल एडिट करें
+                                </button>
+                            )}
+                        </div>
                         
                         {message && <p className="success-message">{message}</p>}
                         {error && <p className="error-message">{error}</p>}
@@ -145,7 +167,6 @@ const Profile = () => {
                     <button className="logout-btn" onClick={handleLogout}>Logout / लॉगआउट</button>
                 </div>
 
-                {/* Right Column: My Listings */}
                 <div className="my-listings-section">
                     <h2>My Listings / मेरी लिस्टिंग</h2>
                     {loadingProducts ? (

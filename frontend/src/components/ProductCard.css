@@ -1,107 +1,106 @@
-/* src/components/ProductCard.css - Refactored */
-
-.product-card {
+.product-card-revamped {
   background-color: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px_12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
-  /* NO fixed width - this lets the parent grid control the size */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  height: 100%; /* Ensures all cards in a grid row are the same height */
 }
 
-.product-card:hover {
+.product-card-revamped:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.product-image-container {
+.product-image-wrapper {
   position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3; /* Rectangular aspect ratio for a professional look */
+  background-color: #f0f0f0;
 }
 
 .product-image {
-  width: 100%; /* ✅ Fix: Image should be 100% width of its container */
-  height: 180px;
-  object-fit: cover; /* Ensures the image covers the area without distortion */
-  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.product-distance-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  padding: 4px 8px;
+.distance-badge {
+  position: relative;
+  color: rgb(59, 212, 39);
+  padding: 5px 10px;
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 500;
+  backdrop-filter: blur(5px);
 }
 
-.product-content {
-  padding: 1rem;
+.product-info {
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Ensures content area fills the available space */
+  flex-grow: 1; /* This is key for making cards in a row equal height */
+}
+
+.product-header {
+  flex-grow: 1; /* Pushes price and meta to the bottom */
 }
 
 .product-type {
-  font-size: 0.85rem;
-  color: #888;
-  text-transform: capitalize;
-  margin-bottom: 0.25rem;
+  color: #555;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
 .product-name {
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin: 0;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 12px 0;
   line-height: 1.3;
+  /* Truncate long names to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  height: 2.6em; /* 2 lines * 1.3 line-height */
 }
 
 .product-price {
-  font-size: 1.4rem;
-  color: var(--primary-green);
-  font-weight: 700;
-  margin: 0.5rem 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #2c6e49; /* Green color for price */
+  margin-bottom: 12px;
 }
 
 .product-meta {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 0.85rem;
   color: #666;
   border-top: 1px solid #f0f0f0;
-  padding-top: 0.75rem;
-  margin-top: auto; /* Pushes this to the bottom of the card */
-}
-
-.card-button {
-  padding: 0.7rem;
-  margin-top: 1rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  text-align: center;
-}
-
-.view-details-button {
-  background-color: var(--primary-dark-green);
-  color: white;
-}
-.view-details-button:hover {
-  background-color: var(--primary-green);
+  padding-top: 12px;
+  margin-top: auto; /* Pushes meta to the bottom */
 }
 
 .delete-button {
-  background-color: #e74c3c;
+  background-color: #ff4d4d;
   color: white;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
 }
+
 .delete-button:hover {
-  background-color: #c0392b;
+  background-color: #cc0000;
 }
