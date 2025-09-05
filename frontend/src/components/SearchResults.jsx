@@ -46,12 +46,12 @@ function SearchResults() {
 
   return (
     <div className="search-results-page">
-      <h2 className="search-results-title">
+      <h4 className="search-results-title">
         {searchQuery 
           ? `Results for: "${searchQuery}" / "${searchQuery}" के लिए परिणाम` 
           : "Please enter a search term / कृपया एक खोज शब्द दर्ज करें"
         }
-      </h2>
+      </h4>
 
       {loading && <Loader />}
       {error && <p className="info-message error">{error}</p>}

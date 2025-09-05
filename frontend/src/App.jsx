@@ -1,7 +1,10 @@
-// App.js - Refactored without ProtectedRoute
+// App.jsx - With ScrollToTop solution
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React from "react";
+
+// ✅ 1. IMPORT THE NEW COMPONENT
+import ScrollToTop from "./components/smallComponents/ScrollToTop";
 
 // Context Providers
 import {SearchProvider} from "./components/context/SearchContext";
@@ -29,33 +32,35 @@ import Refund from "./components/policies/Refund";
 function App() {
   return (
     <Router>
+      {/* ✅ 2. ADD THE COMPONENT HERE */}
+      <ScrollToTop /> 
+      
       <AuthProvider>
         <SearchProvider>
           <Routes>
             <Route path="/" element={<Layout />}>
               {/* Main Pages */}
               <Route index element={<BodySpace />} />
-              <Route path="about" element={<About />} />
-              <Route path="login" element={<Login />} />
-              <Route path="products" element={<Products />} />
-              <Route path="products/:category" element={<CategoryProducts />} />
-              <Route path="product/:productId" element={<ProductDetails />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:category" element={<CategoryProducts />} />
+              <Route path="/product/:productId" element={<ProductDetails />} />
               
               {/* Unprotected Routes (for now) */}
-              <Route path="sell" element={<Sell />} />
-              <Route path="profile" element={<Profile />} />
+              <Route path="/sell" element={<Sell />} />
+              <Route path="/profile" element={<Profile />} />
 
               {/* Policy Pages */}
-              <Route path="terms" element={<Terms />} />
-              <Route path="privacy" element={<Privacy />} />
-              <Route path="refund" element={<Refund />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/refund" element={<Refund />} />
               
               {/* Fallback Route */}
               <Route path="*" element={<BodySpace />} />
-              </Route>
-              <Route path="search" element={<SearchResults />} />
+            <Route path="search" element={<SearchResults />} />
+            </Route>
           </Routes>
-        
         </SearchProvider>
       </AuthProvider>
     </Router>
