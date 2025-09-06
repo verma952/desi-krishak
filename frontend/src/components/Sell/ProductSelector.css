@@ -1,202 +1,127 @@
-/* This replaces your previous ProductForm.css */
+/* src/components/Sell/ProductSelector.css */
 
-.product-form-new {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+/* Root variables (inherits project theme if already defined) */
+:root {
+  --primary-green: #2a9d8f;
+  --primary-dark-green: #264653;
+  --accent-orange: #f4a261;
+  --accent-yellow: #e9c46a;
+  --text-dark: #333333;
+  --text-light: #6c757d;
+  --background-light: #f9f9f9;
 }
 
-.form-title {
+/* --- Container --- */
+.product-selector {
   text-align: center;
-  margin-bottom: 0;
-  font-size: 1.75rem;
-  color: var(--primary-dark-green);
+  padding: 2rem 1rem;
 }
 
-.category-highlight {
-  color: var(--accent-orange);
-  text-transform: capitalize;
+.selector-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-dark-green);
+  margin-bottom: 2rem;
 }
-.selector-grid{
-  max-width: fit-content;
+
+/* --- Grid Layout --- */
+.selector-grid {
   display: flex;
-  flex-wrap:wrap;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
 }
-.category-select-card{
+
+/* --- Category Card --- */
+.category-select-card {
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 12px;
-  padding: 1rem;
-  text-align: center;
+  padding: 1.5rem 1rem;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  background-color: #fff;
-  flex-basis: calc(25% - 1.5rem); /* For 4 items with gap */
+  transition: all 0.25s ease;
+  width: 150px;
+  height: 150px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size:50px;
+
+  font-family: 'Poppins', sans-serif;
 }
 
 .category-select-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    border-color: var(--primary-green);
+  transform: translateY(-5px);
+  border-color: var(--primary-green);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.category-select-card:active {
+  transform: scale(0.97);
 }
 
 .category-select-card.selected {
-    border-color: var(--accent-orange);
-    background-color: #fffaf0;
-    box-shadow: 0 0 0 3px rgba(233, 196, 106, 0.3);
+  border-color: var(--accent-orange);
+  background-color: #fffaf0;
+  box-shadow: 0 0 0 3px rgba(233, 196, 106, 0.3);
 }
 
-.category-select-card img {
-    width: 60px; /* Adjust size as needed */
-    height: 60px;
-    margin-bottom: 1rem;
+/* --- Icon --- */
+.category-icon {
+  font-size: 3.5rem; /* ✅ Bigger emoji */
+  margin-bottom: 0.4rem;
+  line-height: 1;
 }
 
-.category-name .category-name {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--text-dark);
-}
-/* Form Sections */
-.form-section {
-  border: none;
-  padding: 1.5rem;
-  margin: 0;
-  border-radius: 12px;
-  background-color: #f9f9f9;
-  border: 1px solid #eee;
-}
-
-.form-section legend {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--primary-dark-green);
-  padding: 0 0.5rem;
-  margin-left: 0.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.25rem;
-}
-.form-group:last-child {
-  margin-bottom: 0;
-}
-
-.form-group-inline {
-  display: flex;
-  gap: 1.5rem;
-}
-.form-group-inline > .form-group {
-  flex: 1;
-}
-
-label {
-  display: block;
+/* --- Category Name --- */
+.category-name {
+  font-size: 0.85rem; /* ✅ Smaller text */
   font-weight: 500;
   color: var(--text-dark);
-  margin-bottom: 0.5rem;
-}
-
-input[type="text"], input[type="number"], input[type="tel"], textarea {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-input:focus, textarea:focus {
-  outline: none;
-  border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
-}
-
-textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-/* Modern File Uploader */
-.file-uploader {
-  border: 2px dashed #ccc;
-  border-radius: 8px;
-  padding: 2rem;
   text-align: center;
-  cursor: pointer;
-  background-color: #fff;
-  transition: border-color 0.2s, background-color 0.2s;
-}
-.file-uploader:hover {
-  border-color: var(--primary-green);
-  background-color: #f7fffd;
-}
-.file-uploader input[type="file"] {
-  display: none; /* Hide the default ugly input */
-}
-.file-uploader .file-label span {
-  color: #555;
-  font-weight: 500;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
-.image-previews {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-.image-previews img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .selector-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .category-select-card {
+    width: 45%;
+    height: 130px;
+    padding: 1rem;
+  }
+
+  .category-icon {
+    font-size: 3rem; /* Slightly smaller but still dominant */
+    margin-bottom: 0.3rem;
+  }
+
+  .category-name {
+    font-size: 0.8rem; /* Smaller text */
+  }
 }
 
-/* Buttons */
-.location-button {
-  width: 100%;
-  padding: 0.8rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-.location-button:hover {
-  background-color: #f5f5f5;
-  border-color: #aaa;
-}
+@media (max-width: 480px) {
+  .selector-title {
+    font-size: 1.3rem;
+  }
 
-.form-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-.back-button, .submit-button {
-  flex: 1;
-  padding: 0.9rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid var(--primary-dark-green);
-}
-.back-button {
-  background-color: #fff;
-  color: var(--primary-dark-green);
-}
-.submit-button {
-  background-color: var(--primary-dark-green);
-  color: #fff;
-  border: none;
+  .category-select-card {
+    width: 100%;
+    height: 120px;
+  }
+
+  .category-icon {
+    font-size: 2.8rem;
+  }
+
+  .category-name {
+    font-size: 0.75rem;
+  }
 }

@@ -1,8 +1,11 @@
-import React, { createContext, useState, useEffect } from 'react';
+// src/context/AuthContext.js
+import React, { createContext, useState } from 'react';
 
+// The context object that components will use
 export const AuthContext = createContext(null);
 
-// ✅ A safe function to get initial state and prevent crashes
+// A safe function to get the initial state from localStorage
+// This runs only once when the app loads.
 const getInitialAuthState = () => {
   try {
     const token = localStorage.getItem('desiKrishak_token');
@@ -13,42 +16,48 @@ const getInitialAuthState = () => {
       return { user: null, token: null };
     }
 
+    // If data exists, parse the user object and return the state
     const user = JSON.parse(userString);
     return { user, token };
 
   } catch (error) {
     console.error("Failed to parse auth data from localStorage", error);
-    // Clean up corrupted data if parsing fails
+    // If parsing fails (e.g., corrupted data), clear it out
     localStorage.removeItem('desiKrishak_user');
     localStorage.removeItem('desiKrishak_token');
     return { user: null, token: null };
   }
 };
 
+// The provider component that will wrap your app
 export const AuthProvider = ({ children }) => {
+  // Initialize state directly from localStorage. This is a great pattern!
   const [authState, setAuthState] = useState(getInitialAuthState());
 
-  // ✅ Standardized login function to accept user and token separately
+  // Function to handle user login
   const login = (user, token) => {
-    // Set state
+    // Update the state in React
     setAuthState({ user, token });
-    // Persist to localStorage
+    // Persist the state to localStorage
     localStorage.setItem('desiKrishak_user', JSON.stringify(user));
     localStorage.setItem('desiKrishak_token', token);
   };
 
+  // Function to handle user logout
   const logout = () => {
-    // Clear state
+    // Clear the state in React
     setAuthState({ user: null, token: null });
-    // Clear from localStorage
+    // Clear the data from localStorage
     localStorage.removeItem('desiKrishak_user');
     localStorage.removeItem('desiKrishak_token');
   };
 
-  // ✅ This is useful for updating user info without needing a new token
+  // Function to update user info (e.g., after editing a profile)
   const updateUser = (newUserData) => {
     setAuthState(prevState => {
-      // Merge new data with the existing user object
+      // Ensure we don't proceed if there's no previous user
+      if (!prevState.user) return prevState;
+
       const updatedUser = { ...prevState.user, ...newUserData };
       // Persist the updated user object to localStorage
       localStorage.setItem('desiKrishak_user', JSON.stringify(updatedUser));
@@ -57,9 +66,11 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  // The value provided to the context consumers
+  // The value provided to all components consuming this context
   const contextValue = {
     ...authState, // Provides `user` and `token` directly
+    // ✅ NEW: A convenient boolean flag for checking auth status
+    isAuthenticated: !!authState.token, 
     login,
     logout,
     updateUser,

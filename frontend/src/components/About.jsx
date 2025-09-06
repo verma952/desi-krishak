@@ -46,7 +46,7 @@ function About() {
 
         {/* Right Column: Image */}
         <div className="about-image-wrapper">
-          <img src="/images/about-farming.jpg" alt="A farmer in a field" />
+          <img src="/images/farmer-in-field.png" alt="A farmer in a field" />
         </div>
       </div>
     </div>

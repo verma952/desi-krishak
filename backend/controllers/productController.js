@@ -7,7 +7,7 @@ exports.createProduct = async (req, res) => {
   try {
     const { 
         name, price, details, village, phone, 
-        category, latitude, longitude 
+        category, latitude, longitude,milkProductionLitersPerDay
     } = req.body;
     
     const userId = req.user.id;
@@ -36,6 +36,10 @@ exports.createProduct = async (req, res) => {
         coordinates: [parseFloat(longitude), parseFloat(latitude)] 
       }
     });
+    
+    if (milkProductionLitersPerDay) {
+            newProduct.milkProductionLitersPerDay = milkProductionLitersPerDay;
+      }
 
     const savedProduct = await newProduct.save();
     res.status(201).json({ message: 'Product created successfully!', product: savedProduct });

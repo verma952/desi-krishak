@@ -1,35 +1,43 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+// src/components/ProductForm/ProductForm.js
+
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProductForm.css';
+import LoginModal from '../Login/LoginModal';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-// PLACEHOLDER_EXAMPLES and getCurrentLocation function remain the same...
+// Make sure this object is defined or imported correctly in your actual file
 const PLACEHOLDER_EXAMPLES = {
-  dairy: { name: "e.g., Fresh Milk, Paneer / दूध, पनीर", details: "Write about purity, quantity, fat content... / शुद्धता, मात्रा, फैट के बारे में लिखें...", },
-  'farming tools': { name: "e.g., Tractor, Rotavator, Fawda / ट्रैक्टर, रोटावेटर, फावड़ा", details: "Write about model, condition, brand, usage hours... / मॉडल, स्थिति, ब्रांड, कितने घंटे चला है...", },
-  cattle: { name: "e.g., Sahiwal Cow, Murrah Buffalo / साहीवाल गाय, मुर्रा भैंस", details: "Write about age, breed, milk yield, health... / उम्र, नस्ल, दूध की मात्रा, स्वास्थ्य...", },
-  crops: { name: "e.g., Wheat, Sugarcane / गेहूं, गन्ना", details: "Write about variety, quantity (in quintals), quality... / किस्म, मात्रा (क्विंटल में), गुणवत्ता...", },
-  default: { name: "e.g., Product Name / उत्पाद का नाम", details: "Write a detailed description of your product... / अपने उत्पाद का विस्तृत विवरण लिखें...", },
+  dairy: { name: "e.g., Fresh Milk, Paneer / दूध, पनीर", details: "Write about purity, quantity, fat content..." },
+  'farming tools': { name: "e.g., Tractor, Rotavator / ट्रैक्टर, रोटावेटर", details: "Write about model, condition, brand..." },
+  cattle: { name: "e.g., Sahiwal Cow / साहीवाल गाय", details: "Write about age, breed, milk yield..." },
+  crops: { name: "e.g., Wheat, Sugarcane / गेहूं, गन्ना", details: "Write about variety, quantity..." },
+  default: { name: "e.g., Product Name / उत्पाद का नाम", details: "Write a detailed description..." },
 };
 
-const getCurrentLocation = () => {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) return reject(new Error('Geolocation is not supported by your browser.'));
-    navigator.geolocation.getCurrentPosition(
-      (position) => resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
-      (err) => reject(new Error(`Location Error: ${err.message}`))
-    );
-  });
-};
+// Assuming these helper functions are also defined or imported in your file
+const getCurrentLocation = () => { /* ... implementation ... */ };
+const sanitizeInput = (input) => input.replace(/<[^>]*>/g, '');
 
 
 const ProductForm = ({ category, onBack }) => {
-  const navigate = useNavigate(); 
+  // ✨ THIS IS THE FIX ✨
+  // This line acts as a guard. If the category prop is invalid (e.g., undefined),
+  // the component will stop rendering here and return nothing, preventing the crash.
+  if (!category) {
+    return null;
+  }
+
+  const navigate = useNavigate();
+  const formRef = useRef(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [coordinates, setCoordinates] = useState(null);
   const [locationStatus, setLocationStatus] = useState('idle');
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  
+  // This line is now safe because the guard above ensures `category` is a valid string.
   const placeholders = PLACEHOLDER_EXAMPLES[category.toLowerCase()] || PLACEHOLDER_EXAMPLES.default;
 
   const handleImageChange = (e) => {
@@ -37,46 +45,76 @@ const ProductForm = ({ category, onBack }) => {
     const previews = files.map(file => URL.createObjectURL(file));
     setImagePreviews(previews);
   };
-
+  
+  // This is the function that is called when the user clicks the location button
   const handleGetLocation = async () => {
+    // 1. Update the UI to show that location is being fetched
     setLocationStatus('fetching');
     try {
+      // 2. Call the helper function to get the actual coordinates
       const coords = await getCurrentLocation();
+      
+      // 3. If successful, save the coordinates and update the UI
       setCoordinates(coords);
       setLocationStatus('success');
     } catch (error) {
+      // 4. If it fails, update the UI to an error state and show an alert
       setLocationStatus('error');
       setCoordinates(null);
       alert(error.message);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // This is a helper function that directly uses the browser's Geolocation API
+  const getCurrentLocation = () => {
+    return new Promise((resolve, reject) => {
+      // First, check if the browser supports geolocation at all
+      if (!navigator.geolocation) {
+        return reject(new Error('Geolocation is not supported by your browser.'));
+      }
 
-    if (!coordinates) {
-      alert('कृपया पहले अपनी लोकेशन सेट करें। (Please set your location first.)');
+      // If supported, ask for the user's current position
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // SUCCESS: The browser found the location.
+          // We "resolve" the promise with the latitude and longitude.
+          resolve({ 
+            lat: position.coords.latitude, 
+            lng: position.coords.longitude 
+          });
+        },
+        (err) => {
+          // ERROR: The user may have blocked the request, or the service failed.
+          // We "reject" the promise with the error message.
+          return reject(new Error(`Location Error: ${err.message}`));
+        }
+      );
+    });
+  };
+
+  const submitFormData = async () => {
+    const token = localStorage.getItem('desiKrishak_token');
+    if (!token) {
+      setIsLoginModalOpen(true);
       return;
     }
 
-    setIsSubmitting(true);
-    
-    try {
-      const data = new FormData(e.target);
-      data.append('category', category);
-      data.append('latitude', coordinates.lat);
-      data.append('longitude', coordinates.lng);
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
 
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        navigate('/login'); 
-        return; 
-      }
-      
+    formData.append('category', category);
+    formData.append('latitude', coordinates.lat);
+    formData.append('longitude', coordinates.lng);
+
+    formData.set('name', sanitizeInput(formData.get('name')));
+    formData.set('details', sanitizeInput(formData.get('details')));
+    formData.set('village', sanitizeInput(formData.get('village')));
+
+    setIsSubmitting(true);
+    try {
       const response = await fetch(`${API_BASE_URL}/api/products/upload`, {
         method: 'POST',
-        body: data,
+        body: formData,
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -84,12 +122,10 @@ const ProductForm = ({ category, onBack }) => {
         alert('Product submitted successfully!');
         if (onBack) onBack();
       } else {
-        // ✅ CATCH AUTHENTICATION ERRORS FROM THE SERVER
         if (response.status === 401) {
-          localStorage.removeItem('token'); // Clean up the bad token
-          navigate('/login'); // Redirect to login
+          localStorage.removeItem('desiKrishak_token');
+          setIsLoginModalOpen(true);
         } else {
-          // For all other errors, show the server message
           const errorData = await response.json();
           alert(`Submission failed: ${errorData.message}`);
         }
@@ -101,7 +137,29 @@ const ProductForm = ({ category, onBack }) => {
     }
   };
 
-  const getLocationButtonText = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!coordinates) {
+      alert('Please set your location first. / कृपया पहले अपनी लोकेशन सेट करें।');
+      return;
+    }
+
+    const phoneInput = formRef.current.phone.value;
+    if (!/^\d{10}$/.test(phoneInput)) {
+      alert('Please enter a valid 10-digit phone number. / कृपया एक वैध 10-अंकीय फ़ोन नंबर दर्ज करें।');
+      return;
+    }
+    
+    const token = localStorage.getItem('desiKrishak_token');
+    if (!token) {
+      setIsLoginModalOpen(true);
+    } else {
+      submitFormData();
+    }
+  };
+
+ const getLocationButtonText = () => {
     switch (locationStatus) {
       case 'fetching': return 'पता लग रहा है...';
       case 'success': return 'लोकेशन मिल गयी ✓';
@@ -110,38 +168,66 @@ const ProductForm = ({ category, onBack }) => {
     }
   };
 
+
   return (
-    // ... your JSX form remains exactly the same ...
-    <form className="simple-product-form" onSubmit={handleSubmit}>
+    <>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={() => {
+          setIsLoginModalOpen(false);
+          alert('Login Successful! Submitting your ad now...');
+          submitFormData();
+        }}
+      />
+
+      <form className="simple-product-form" onSubmit={handleSubmit} ref={formRef}>
         <h2 className="form-title">
           Product Details / प्रोडक्ट की जानकारी
           <span className="category-highlight">{category}</span>
         </h2>
+        
         <div className="form-group">
           <label htmlFor="name">🏷️ Product Name / उत्पाद का नाम</label>
           <input type="text" id="name" name="name" placeholder={placeholders.name} required />
         </div>
+        
         <div className="form-group">
           <label htmlFor="price">₹ Price / क़ीमत</label>
           <input type="number" id="price" name="price" placeholder="e.g., 50000" required />
         </div>
+         {category.toLowerCase() === 'cattle' && (
+        <div className="form-group">
+          <label htmlFor="milkProduction">🥛 Milk Per Day (Liters) / दूध प्रतिदिन (लीटर में)</label>
+          <input
+            type="number"
+            id="milkProduction"
+            name="milkProductionLitersPerDay" // This name MUST match your schema field
+            placeholder="e.g., 15"
+            required
+            step="0.1" // Allows decimal values for liters
+          />
+        </div>
+      )}
         <div className="form-group">
           <label htmlFor="details">📝 Description / विवरण</label>
           <textarea id="details" name="details" placeholder={placeholders.details} required></textarea>
         </div>
+        
         <div className="form-group">
           <label>📷 Upload Photos / फ़ोटो अपलोड करें</label>
           <div className="file-uploader-simple">
-              <input type="file" id="images" name="images" onChange={handleImageChange} multiple accept="image/png, image/jpeg" required/>
-              <p>Tap here to select up to 5 photos</p>
-              <p>5 फ़ोटो चुनने के लिए यहां टैप करें</p>
+            <input type="file" id="images" name="images" onChange={handleImageChange} multiple accept="image/png, image/jpeg" required/>
+            <p>Tap here to select up to 5 photos</p>
+            <p>5 फ़ोटो चुनने के लिए यहां टैप करें</p>
           </div>
           <div className="image-previews">
-              {imagePreviews.map((src, index) => (
-                  <img key={index} src={src} alt={`Preview ${index + 1}`} />
-              ))}
+            {imagePreviews.map((src, index) => (
+              <img key={index} src={src} alt={`Preview ${index + 1}`} />
+            ))}
           </div>
         </div>
+        
         <div className="form-group">
           <label>🗺️ Product Location / उत्पाद की लोकेशन</label>
           <p className="location-info">
@@ -149,8 +235,8 @@ const ProductForm = ({ category, onBack }) => {
             <br/>
             (Set your current GPS location for the ad.)
           </p>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className={`location-button ${locationStatus}`}
             onClick={handleGetLocation}
             disabled={locationStatus === 'fetching' || locationStatus === 'success'}
@@ -158,21 +244,25 @@ const ProductForm = ({ category, onBack }) => {
             {getLocationButtonText()}
           </button>
         </div>
+        
         <div className="form-group">
           <label htmlFor="village">📍 Village/City / गांव/शहर</label>
           <input type="text" id="village" name="village" placeholder="e.g., Rampur, Ghaziabad" required />
         </div>
+        
         <div className="form-group">
           <label htmlFor="phone">📞 Phone Number / फ़ोन नंबर</label>
           <input type="tel" id="phone" name="phone" placeholder="Your 10-digit mobile number" required />
         </div>
+        
         <div className="form-actions-simple">
           <button type="button" className="back-button" onClick={onBack}>Back / वापस</button>
           <button type="submit" className="submit-button" disabled={isSubmitting}>
             {isSubmitting ? 'Submitting...' : 'Submit Ad / विज्ञापन सबमिट करें'}
           </button>
         </div>
-    </form>
+      </form>
+    </>
   );
 };
 

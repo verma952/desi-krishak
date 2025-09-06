@@ -30,7 +30,7 @@
 }
 
 .navbar-logo img {
-  height: 50px; /* A consistent height */
+  height: 50px;
   width: auto;
   border-radius: 50%;
 }
@@ -45,7 +45,7 @@
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* Cleaner spacing */
+  gap: 1.5rem;
 }
 
 .navbar-links a {
@@ -62,39 +62,35 @@
   color: var(--primary-green);
 }
 
-/* ✅ This special class provided by NavLink makes styling the active link simple */
 .navbar-links a.active {
   color: var(--primary-green);
   font-weight: 700;
 }
 
-/* ✅ The primary Call-to-Action button */
-.sell-button {
-  background-color: var(--accent-orange);
-  color: var(--text-light) !important; /* Use !important to override other link styles */
-  padding: 0.6rem 1.5rem !important; /* Use !important to override other link styles */
-  border-radius: 8px;
-  font-weight: 700 !important;
-  transition: background-color 0.2s ease-in-out;
+/* --- Sell Link (Professional style like other nav links) --- */
+.sell-link {
+  color: var(--primary-dark-green);
+  font-weight: 600;
+  position: relative;
+  transition: color 0.2s ease-in-out;
 }
 
-.sell-button:hover {
-  background-color: #e5924a; /* A slightly darker orange */
+.sell-link:hover {
+  color: var(--primary-green);
 }
 
 /* --- Mobile Styles --- */
 .navbar-toggle {
-  display: none; /* Hidden by default on desktop */
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
   color: var(--primary-dark-green);
 }
 
-
 @media (max-width: 768px) {
   .navbar-toggle {
-    display: block; /* Show hamburger menu */
+    display: block;
     z-index: 10;
   }
 
@@ -111,8 +107,7 @@
     align-items: flex-start;
     padding: 6rem 2rem 2rem;
     gap: 1.5rem;
-    
-    /* Smooth slide-in animation */
+
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
   }
@@ -121,7 +116,7 @@
     transform: translateX(0);
   }
 
-  .sell-button {
-    margin-top: 1rem;
+  .sell-link {
+    margin-top: 0.5rem;
   }
 }

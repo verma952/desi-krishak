@@ -16,7 +16,7 @@ import Layout from "./components/Layout";
 // Page Components
 import BodySpace from "./components/BodySpace";
 import Sell from "./components/Sell/Sell";
-import Login from "./components/Login";
+import Login from "./components/Login/Login";
 import Products from "./components/Products";
 import About from "./components/About";
 import Profile from "./components/smallComponents/Profile";

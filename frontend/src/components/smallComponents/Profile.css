@@ -6,198 +6,258 @@
   --text-light: #6c757d;
   --border-color: #dee2e6;
   --danger-red: #e74c3c;
+
+  --brand-yellow: #f5a623;
+  --brand-brown: #8b5e34;
+  --background-offwhite: #fdfdfc;
+  --subtle-border: #e0e0e0;
 }
 
 .profile-page-container {
-    background-color: var(--background-light);
-    padding: 2rem 1rem;
-    font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
+  background-color: var(--background-light);
+  padding: 2rem 1rem;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
 }
 
 .profile-grid {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 2rem;
-    align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 2rem;
+  align-items: flex-start;
 }
 
-.profile-form-card, .my-listings-section {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px_20px rgba(0, 0, 0, 0.07);
+.profile-form-card {
+  background-color: var(--background-offwhite);
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--subtle-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.profile-form-card h2, .my-listings-section h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary-dark-green);
-    margin: 0 0 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
-    text-align: center;
+/* --- Profile Header --- */
+.profile-header {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background-color: #fff;
+  border-bottom: 1px solid var(--subtle-border);
+}
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--primary-green);
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 3rem;
+  font-weight: 600;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.profile-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-dark-green);
+  margin: 0;
+}
+.profile-email {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-top: 0.25rem;
 }
 
-/* --- ✅ NEW FORM GROUP STYLES --- */
-
-/* Default "View Mode" styles */
-.form-group.viewing {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 0.8rem 0;
-    border-bottom: 1px solid #f0f0f0;
-    margin-bottom: 0;
-}
-.form-group.viewing label {
-    color: var(--text-light);
-    font-size: 0.9rem;
-    margin: 0;
-}
-.profile-value {
-    color: var(--text-dark);
-    font-weight: 500;
-    font-size: 0.95rem;
-    text-align: right;
-    margin: 0;
-    word-break: break-word; /* Prevents long emails from overflowing */
-}
-.address-value {
-    max-width: 65%; /* Prevent long addresses from breaking layout */
+/* --- Profile Details Section --- */
+.profile-body {
+  padding: 1.5rem 2rem 2rem;
 }
 
-/* "Edit Mode" styles */
-.form-group.editing {
-    margin-bottom: 1.25rem;
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
-.form-group.editing label {
-    display: block;
-    font-weight: 500;
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin-bottom: 0.5rem;
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.detail-icon {
+  color: var(--primary-green);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+.detail-text {
+  display: flex;
+  flex-direction: column;
+}
+.detail-label {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+.detail-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
 }
 
-.profile-form input, .profile-form textarea {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 1rem;
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
+/* --- Form Styles --- */
+.form-group {
+  margin-bottom: 1.25rem;
 }
-.profile-form input:focus, .profile-form textarea:focus {
-    outline: none;
-    border-color: var(--primary-green);
-    box-shadow: 0 0 0 3px rgba(44, 110, 73, 0.1);
+.form-group label {
+  display: block;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+.profile-form input,
+.profile-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.profile-form input:focus,
+.profile-form textarea:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(44, 110, 73, 0.1);
+}
+.profile-form textarea {
+  min-height: 70px;
+  resize: vertical;
 }
 
-/* --- Button Styling --- */
+/* --- Buttons --- */
 .form-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
 }
-.action-btn, .logout-btn {
-    width: 100%;
-    padding: 0.8rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
+.action-btn,
+.logout-btn {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
-.edit-btn, .save-btn {
-    background-color: var(--primary-green);
-    color: white;
+.edit-btn {
+  background-color: var(--brand-yellow);
+  color: var(--text-dark);
 }
-.edit-btn:hover, .save-btn:hover {
-    background-color: var(--primary-dark-green);
+.edit-btn:hover {
+  background-color: #f7b039;
+}
+.save-btn {
+  background-color: var(--primary-green);
+  color: white;
+}
+.save-btn:hover {
+  background-color: var(--primary-dark-green);
 }
 .cancel-btn {
-    background-color: #f1f3f5;
-    color: var(--text-dark);
-    border-color: #ced4da;
+  background-color: #f1f3f5;
+  color: var(--text-dark);
+  border-color: #ced4da;
 }
 .cancel-btn:hover {
-    background-color: #e9ecef;
+  background-color: #e9ecef;
 }
 .logout-btn {
-    background-color: transparent;
-    color: var(--danger-red);
-    border: 1px solid var(--danger-red);
-    margin-top: 1rem;
+  background-color: transparent;
+  color: var(--danger-red);
+  border: 1px solid var(--danger-red);
+  margin-top: 1rem;
 }
 .logout-btn:hover {
-    background-color: var(--danger-red);
-    color: white;
+  background-color: var(--danger-red);
+  color: white;
 }
 
-/* --- Message Styling --- */
-.success-message, .error-message {
-    text-align: center;
-    margin-top: 1rem;
-    font-weight: 500;
-    padding: 0.75rem;
-    border-radius: 8px;
-}
-.success-message { background-color: #e6f9f0; color: var(--primary-dark-green); }
-.error-message { background-color: #fbe9e7; color: #c62828; }
-
-
-/* Add this to your src/components/Profile.css */
-
+/* --- My Listings Section --- */
 .my-listings-section {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-    
-    /* ✅ CORE FIX: Create a scrollable container */
-    display: flex;
-    flex-direction: column;
-    max-height: 90vh; /* Set a maximum height (e.g., 90% of the viewport height) */
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
 }
-
 .my-listings-section h2 {
-    /* ... your existing h2 styles are fine ... */
-    flex-shrink: 0; /* Prevents the title from shrinking */
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--brand-brown);
+  margin: 0;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--subtle-border);
+}
+.my-listings-section .product-list-container {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding: 1rem;
 }
 
-/* This will make the ProductList component fill the remaining space and become scrollable */
-.my-listings-section > div { /* This targets the container for the ProductList */
-    overflow-y: auto; /* Add a vertical scrollbar ONLY when needed */
-    flex-grow: 1;
-    padding-right: 10px; /* Add some space for the scrollbar */
-    margin-right: -10px;
-}
-
-/* --- RESPONSIVE STYLES --- */
+/* --- Mobile Responsive Fixes --- */
 @media (max-width: 900px) {
-    .profile-grid {
-        grid-template-columns: 1fr;
-    }
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .my-listings-section {
+    max-height: none;
+  }
 }
 
 @media (max-width: 480px) {
-    .profile-page-container {
-        padding: 0;
-        background-color: #fff; 
-    }
-    .profile-form-card, .my-listings-section {
-        padding: 1.5rem 1rem;
-        box-shadow: none;
-        border-radius: 0;
-    }
-    .profile-form-card h2, .my-listings-section h2 {
-        font-size: 1.25rem;
-    }
-    .form-group.viewing {
-        padding: 0.7rem 0;
-    }
+  .profile-page-container {
+    padding: 0.5rem;
+  }
+  .profile-form-card {
+    border-radius: 12px;
+    margin: 0 0.5rem;
+  }
+  .profile-header {
+    padding: 1.5rem 1rem;
+  }
+  .profile-body {
+    padding: 1rem 1rem 1.5rem;
+  }
+  .form-group label {
+    font-size: 0.8rem;
+  }
+  .profile-form input,
+  .profile-form textarea {
+    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+  }
+  .action-btn,
+  .logout-btn {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+  .my-listings-section {
+    margin: 1rem 0.5rem;
+    border-radius: 12px;
+  }
+  .my-listings-section h2 {
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
 }
